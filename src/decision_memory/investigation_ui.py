@@ -9,6 +9,21 @@ import streamlit as st
 
 from .investigations import Investigations, revision_report
 from .report_entry_ui import render_report_entry
+from .snapshot import is_current
+
+
+def render_ready_answer(report, pending=True):
+    """Display the validated answer without waiting for the decision section."""
+    st.subheader("Answer")
+    st.write(report["answer_record"]["result"]["answer"])
+    if pending:
+        st.info("Decision history is pending. You can read the answer and sources while it finishes.")
+    else:
+        st.warning("Decision history did not finish. Your generated answer is saved below in this revision.")
+    with st.expander("Sources for this answer"):
+        for n, passage in enumerate(report["retrieval"]["evidence"], 1):
+            st.markdown(f"**[E{n}] {passage['date']} · {passage['id']}**")
+            st.text(passage["text"])
 
 
 def generate_report(
@@ -21,9 +36,27 @@ def generate_report(
         def retrieve(self, question, mode):
             return Retriever(store, models_factory(), config).retrieve(question, mode)
 
-    return Investigations(store, LazyRetriever(), config).revise(
-        report, prompt=prompt, question_date=question_date, recover=recover, decision_only=decision_only
-    )
+    preview = st.empty()
+
+    def on_answer(ready):
+        with preview.container():
+            render_ready_answer(ready)
+
+    try:
+        result = Investigations(store, LazyRetriever(), config).revise(
+            report, prompt=prompt, question_date=question_date, recover=recover,
+            decision_only=decision_only, on_answer=on_answer,
+        )
+    except (OSError, RuntimeError, ValueError):
+        # Keep a completed answer visible even if the following decision call fails.
+        document = Investigations(store, config=config).document(report)
+        revision = document["revisions"][-1]
+        if (revision.get("answer_record") or {}).get("result", {}).get("status") == "answered":
+            with preview.container():
+                render_ready_answer(revision_report(report, document, revision), pending=False)
+        raise
+    preview.empty()
+    return result
 
 
 def render_investigation(report, store, models_factory, config, configured, busy):
@@ -38,6 +71,11 @@ def render_investigation(report, store, models_factory, config, configured, busy
     selected_id = report.get("revision_id", document["current_revision"])
     selected = next((r for r in revisions if r["id"] == selected_id), revisions[-1])
     latest = selected["id"] == document["current_revision"]
+    if not is_current(store, selected["retrieval"]):
+        st.warning(
+            "Historical report: conversations have changed or its source snapshot is unknown. "
+            "Use Revise report to refresh from current evidence."
+        )
     changed = (
         revision_report(report, document, selected)
         if report.get("revision_id") != selected["id"]
@@ -107,6 +145,8 @@ def render_investigation(report, store, models_factory, config, configured, busy
     last = document["revisions"][-1]
     incomplete = last["status"] in ("pending", "failed")
     if incomplete:
+        if (last.get("answer_record") or {}).get("result", {}).get("status") == "answered":
+            render_ready_answer(revision_report(report, document, last), pending=last["status"] == "pending")
         st.warning(
             "The last revision did not finish. Your previous version is preserved. "
             + last.get("error", "")

@@ -118,3 +118,10 @@ def test_expansion_keeps_original_candidates_eligible(store):
     assert len(expanded_ids) <= 80
     assert expanded["trace"]["searches"][0]["query"] == q["question"]
     assert set(expanded["trace"]["searches"][0]["rankings"]) == {"bm25", "dense"}
+
+
+def test_overlap_deduplication_retains_unique_tail_and_changed_source():
+    rows = [{"session_id": "a", "content_hash": "original", "date": "2023-05-01", "start": 0, "end": 100},
+            {"session_id": "a", "content_hash": "original", "date": "2023-05-01", "start": 10, "end": 110},
+            {"session_id": "a", "content_hash": "edited", "date": "2023-05-01", "start": 0, "end": 100}]
+    assert distinct([0, 1, 2], rows) == [0, 1, 2]

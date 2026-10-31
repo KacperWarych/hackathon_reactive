@@ -1,0 +1,160 @@
+{
+  "checked_at": "2026-10-31T09:24:29.239293+01:00",
+  "source_checks": [
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/__init__.py",
+      "baseline": "d9b56dbcc3de40941849a1d6859d3264431f78fb1361d6f8b4cfd2e03bcd30b0",
+      "current": "d9b56dbcc3de40941849a1d6859d3264431f78fb1361d6f8b4cfd2e03bcd30b0"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/chunks.py",
+      "baseline": "68fbb491cfcc06e81a9325b8a187a15ed99ca6ff2303f99254998015c3a8defd",
+      "current": "68fbb491cfcc06e81a9325b8a187a15ed99ca6ff2303f99254998015c3a8defd"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/cli.py",
+      "baseline": "e7f7418c1553b8ae14dbbad68538ee1b3b6b25701e44e50a0091e66e5903453f",
+      "current": "e7f7418c1553b8ae14dbbad68538ee1b3b6b25701e44e50a0091e66e5903453f"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "baseline": "24c9bcd494733daa4e7495f5218005f25958d56c0ad0f80c5cdd4ee31bdb3ec4",
+      "current": "24c9bcd494733daa4e7495f5218005f25958d56c0ad0f80c5cdd4ee31bdb3ec4"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py",
+      "baseline": "c868c25106f3cfacfe4f79924ab7d50a9c64bc705a2bcdf2522000db3df58413",
+      "current": "c868c25106f3cfacfe4f79924ab7d50a9c64bc705a2bcdf2522000db3df58413"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entries.py",
+      "baseline": "e14c1291c407911b1717b57162b423ccfc46273bdf9f8f036af408bc0c083111",
+      "current": "e14c1291c407911b1717b57162b423ccfc46273bdf9f8f036af408bc0c083111"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entry_ui.py",
+      "baseline": "71889df3d5f0eb91fae1f1d5174bdba3ee3779b39e3cccff882487c26457c2c0",
+      "current": "71889df3d5f0eb91fae1f1d5174bdba3ee3779b39e3cccff882487c26457c2c0"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evaluation.py",
+      "baseline": "116a3718a054e2d0326429db820cbeb9d479ac6bee89cece44144ac15a8feefc",
+      "current": "116a3718a054e2d0326429db820cbeb9d479ac6bee89cece44144ac15a8feefc"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "baseline": "755f6a7f5d9d18b0b8c1a240c6aedac66f02762489e9589ce51bc97945791b95",
+      "current": "755f6a7f5d9d18b0b8c1a240c6aedac66f02762489e9589ce51bc97945791b95"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/index.py",
+      "baseline": "9a3528f29e34f256298b31bdda16f717e8c025b857f86d26160af17b29e52c10",
+      "current": "9a3528f29e34f256298b31bdda16f717e8c025b857f86d26160af17b29e52c10"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigation_ui.py",
+      "baseline": "8d2a6858f8c8c64c9df096e3822d6d609ee7585d539dd67d9c34716f4ca98f7e",
+      "current": "8d2a6858f8c8c64c9df096e3822d6d609ee7585d539dd67d9c34716f4ca98f7e"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "baseline": "6eb23938e825bd132c91e75b4e4ad85d7655161da575238af7ed3932b6aacb77",
+      "current": "6eb23938e825bd132c91e75b4e4ad85d7655161da575238af7ed3932b6aacb77"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+      "baseline": "39c8f59def8f1a9ed34291955d14e6e1be05398e245944ee67909b39a3719ee9",
+      "current": "39c8f59def8f1a9ed34291955d14e6e1be05398e245944ee67909b39a3719ee9"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "baseline": "a4f441c57854712af81045ba743bd55158835431a43d4fe5bb524a2fe3536d01",
+      "current": "a4f441c57854712af81045ba743bd55158835431a43d4fe5bb524a2fe3536d01"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/reactor.py",
+      "baseline": "83ae6d039367b4fb003b92504c57df7359503d9cb634599af0bb654e55b009e0",
+      "current": "83ae6d039367b4fb003b92504c57df7359503d9cb634599af0bb654e55b009e0"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/report_entry_ui.py",
+      "baseline": "d1d05c725b1d3c350de2e18a2f4f60c8688591b1cb921da03d89146a862e7813",
+      "current": "d1d05c725b1d3c350de2e18a2f4f60c8688591b1cb921da03d89146a862e7813"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "baseline": "535c750f4893af3bbf39efdb8801ac6eb37be53e4a49feef51699e849de45746",
+      "current": "535c750f4893af3bbf39efdb8801ac6eb37be53e4a49feef51699e849de45746"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "baseline": "1757d31fd448625adc08c6a684f2e785d54875d0470c3a89f6590a2c726cd4f4",
+      "current": "1757d31fd448625adc08c6a684f2e785d54875d0470c3a89f6590a2c726cd4f4"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/vendor/__init__.py",
+      "baseline": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/vendor/reactor_client.py",
+      "baseline": "99cd636b269736bfb0e7bcf0d1f1fbe7b47613753a1f9cc342aa3d0912d8a9a0",
+      "current": "99cd636b269736bfb0e7bcf0d1f1fbe7b47613753a1f9cc342aa3d0912d8a9a0"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/vendor/score.py",
+      "baseline": "d5081b7a3412c768d202b0ca693888d3135678c92b55a6321a24691d3e320297",
+      "current": "d5081b7a3412c768d202b0ca693888d3135678c92b55a6321a24691d3e320297"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/app.py",
+      "baseline": "6240474fb750a4c3a1ed0322a9aaabf935832f55a6e96d33209b9453b80d3ebc",
+      "current": "6240474fb750a4c3a1ed0322a9aaabf935832f55a6e96d33209b9453b80d3ebc"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/benchmark_budgets.py",
+      "baseline": "cc3fdab45375089618e4eb49cb23c275528c609674f9f4a85859551f76669144",
+      "current": "cc3fdab45375089618e4eb49cb23c275528c609674f9f4a85859551f76669144"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/live_run.py",
+      "baseline": "f9d49b243ad2d939a0930f9eac8bcd3f3a34064ca2831b1de7f12b37634c6e19",
+      "current": "f9d49b243ad2d939a0930f9eac8bcd3f3a34064ca2831b1de7f12b37634c6e19"
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/prepare.py",
+      "baseline": "55fae2fad1102e537977bb4a2dcceb6387439bc1fc9e2ffa07c8260942406d4a",
+      "current": "55fae2fad1102e537977bb4a2dcceb6387439bc1fc9e2ffa07c8260942406d4a"
+    }
+  ],
+  "changed_files": [],
+  "installed_differences": [
+    {
+      "file": "decision.py",
+      "source_sha256": "c868c25106f3cfacfe4f79924ab7d50a9c64bc705a2bcdf2522000db3df58413",
+      "installed_sha256": "1e12e850cf14887b1bc1d15bcfb5603c62fe89c7a5b821bc02683e9f5515ef81"
+    },
+    {
+      "file": "investigation_ui.py",
+      "source_sha256": "8d2a6858f8c8c64c9df096e3822d6d609ee7585d539dd67d9c34716f4ca98f7e",
+      "installed_sha256": "de5242f8d24acd3992e6af9d6c2ff9f329dbf3b644c932bd08fa5aa58a540c61"
+    },
+    {
+      "file": "investigations.py",
+      "source_sha256": "6eb23938e825bd132c91e75b4e4ad85d7655161da575238af7ed3932b6aacb77",
+      "installed_sha256": "0d4df91eb3a23cdb3fb8d79b73a990b5f3fd687a8c712ca04c91dbac7f5fa3e5"
+    },
+    {
+      "file": "report_entry_ui.py",
+      "source_sha256": "d1d05c725b1d3c350de2e18a2f4f60c8688591b1cb921da03d89146a862e7813",
+      "installed_sha256": null
+    }
+  ],
+  "installed_ui_test": {
+    "test": "test_investigation_ui.py::test_build_decision_view_uses_one_request_and_can_recover",
+    "result": "failed",
+    "error": "generate_report() got an unexpected keyword argument 'decision_only'",
+    "remote_calls": "fake adapter only"
+  },
+  "application_modified": false
+}

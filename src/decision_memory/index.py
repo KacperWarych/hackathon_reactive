@@ -9,6 +9,7 @@ import numpy as np
 from .chunks import chunk_scheme, chunk_turns
 from .config import Config, digest
 from .memory import Memory
+from .operations import serialized_operation
 
 
 class Index:
@@ -16,6 +17,7 @@ class Index:
         self.store, self.models, self.config = store, models, config
         self.scheme = chunk_scheme(config, models.revisions[config.embedding])
 
+    @serialized_operation
     def build(self, split, histories=None, dense=True):
         start = time.monotonic()
         memory = Memory(self.store, self.models.tokenizer, self.models.key)

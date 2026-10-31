@@ -104,3 +104,27 @@ def test_build_decision_view_uses_one_request_and_can_recover(indexed, env, monk
     assert not app.exception
     assert not app.error
     assert len(adapter.calls) == calls + 2  # reset plus decision, no answer generation
+
+
+def test_ready_answer_renders_before_decision_call(indexed, env, monkeypatch):
+    import decision_memory.investigation_ui as ui
+
+    rendered = []
+    original_render = ui.render_ready_answer
+    original_call = Adapter.call
+
+    def render(report, pending=True):
+        original_render(report, pending=pending)
+        rendered.append((report, pending))
+
+    def call(self, *args):
+        if "--question-id" in args and args[args.index("--question-id") + 1].endswith("decision_record"):
+            assert rendered and rendered[-1][1] is True
+            assert rendered[-1][0]["answer_record"]["result"]["status"] == "answered"
+        return original_call(self, *args)
+
+    monkeypatch.setattr(ui, "render_ready_answer", render)
+    monkeypatch.setattr(Adapter, "call", call)
+    app, _ = prepared_app(monkeypatch)
+    assert len(rendered) == 1
+    assert not any("Decision history is pending" in item.value for item in app.info)

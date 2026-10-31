@@ -7,7 +7,7 @@ Local hybrid retrieval over the Reactive AI conversation dataset, with a source-
 ## Start
 
 ```sh
-cd '/Users/kacperwarych/Desktop/hackathon reactive ai'
+cd '/Users/kacperwarych/Documents/ChatGPT/hackathon reactive ai'
 sh scripts/setup.sh
 .venv/bin/memory ingest --split dev
 .venv/bin/memory ingest --split test
@@ -154,3 +154,38 @@ JSONL format. Original dataset files and gold labels are not changed.
 
 Code organization: `entries.py` handles parsing, storage and export;
 `entry_ui.py` contains the entry form; `app.py` composes the explorer.
+
+## Hackathon release gate (A–F)
+
+After changing source, refresh the regular installed package and run the offline gate:
+
+```sh
+UV_CACHE_DIR=.cache/uv UV_PYTHON_INSTALL_DIR=.python .tools/uv sync --frozen --no-editable --reinstall-package decision-memory
+.venv/bin/python scripts/release_gate.py
+.venv/bin/streamlit run app.py
+```
+
+Stop any existing Streamlit process before starting the refreshed app. The gate creates
+`outputs/hackathon-release/<fresh-namespace>/release.json` with source/installed parity,
+code, fixture, lockfile and package identities, test logs, and actual timings. Tests use
+fake transport and synthetic temporary datasets; they do not establish live-service
+latency, cost, answer accuracy, or performance on the production corpus.
+
+Report snapshots now cover every eligible session ID, canonical date and content hash.
+Changed or unidentified snapshots are labelled historical; use **Revise report** to
+refresh. Building a decision view cannot relabel historical evidence as current.
+Benchmark reuse and export reject changed snapshots; create a fresh run ID after data
+changes. This does not automatically send a new paid request.
+
+Imports validate complete input before publishing. Use a fresh split when changing
+gold; an identical repeat import remains supported. SQL rollback and gold cleanup cover
+ordinary exceptions, including commit failure. SQLite and gold files are not a single
+crash-atomic transaction. Import, entry writes, indexing, retrieval and generation are
+serialized inside one Python process. Run the demo in one process; do not run a separate
+CLI importer/indexer alongside it.
+
+Resolution quotes require selected original user-turn provenance, with conservative
+English/Polish confirmation and negation checks. This verifies traceability, not whether
+a quote resolves the same concern. Existing evidence without provenance needs refresh.
+Campaign-wide customer totals, reconnect recovery, model changes and official submission
+ID-manifest hardening remain outside this individual-history demo.

@@ -3,6 +3,7 @@ import json
 import re
 
 from .config import digest
+from .operations import serialized_operation
 from .store import iso_date
 
 ROLES = {"user": "user", "customer": "user", "client": "user", "klient": "user",
@@ -30,6 +31,7 @@ def parse_transcript(text):
     return [{"turn_id": f"t_{i+1}", **turn} for i, turn in enumerate(turns)]
 
 
+@serialized_operation
 def add_entry(store, split, history_id, date, transcript):
     turns = parse_transcript(transcript)
     iso = iso_date(date)

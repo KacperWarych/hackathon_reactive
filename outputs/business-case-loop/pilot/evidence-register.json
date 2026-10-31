@@ -1,0 +1,8 @@
+{
+  "status": "empty capture template; no customer evidence collected",
+  "interviews": [],
+  "pilots": [],
+  "required_interview_fields": ["participant_id", "buyer_role", "recent_case_date", "observed_or_reported", "noticed_change_when", "actual_failure", "current_workaround", "frequency_basis", "consequence_and_measurement_basis", "data_permission", "purchase_authority", "next_behavioral_commitment", "disqualifying_evidence"],
+  "required_pilot_fields": ["pilot_id", "consented_scope", "offer_price_and_currency", "payment_status", "baseline_minutes", "input_preparation_minutes", "assisted_review_minutes", "correction_minutes", "operator_minutes", "actual_compute_cost", "useful_decisions", "false_changes", "unsupported_approvals", "repeat_use", "continuation_offer", "continuation_outcome"],
+  "rules": ["Use null for unknown numbers; never zero", "Record discounts and free work explicitly", "Distinguish reported savings from observed timing", "Do not count merely hypothetical avoided loss as realized revenue", "Keep personally identifying or confidential raw content out of this shared template"]
+}

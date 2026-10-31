@@ -12,6 +12,8 @@ from .config import Config, digest, revisions
 from .evidence import AGGREGATION, expansion_reason, extract_options, select_options
 from .index import Index
 from .memory import Memory
+from .operations import serialized_operation
+from .snapshot import eligible_fingerprint
 from .vendor.reactor_client import build_message
 
 MODES = ("bm25", "dense", "hybrid", "rerank", "full")
@@ -40,8 +42,9 @@ def distinct(indices, chunks):
             other = chunks[j]
             if row["session_id"] != other["session_id"]:
                 continue
-            overlap = max(0, min(row["end"], other["end"]) - max(row["start"], other["start"]))
-            if overlap / max(1, min(row["end"]-row["start"], other["end"]-other["start"])) > .65:
+            if (row.get("iso", row.get("date")) == other.get("iso", other.get("date"))
+                    and row.get("content_hash") == other.get("content_hash")
+                    and other["start"] <= row["start"] and row["end"] <= other["end"]):
                 redundant = True
                 break
         if not redundant:
@@ -95,18 +98,17 @@ class Retriever:
         self._cache = None
         self.memory = None
 
+    @serialized_operation
     def retrieve(self, question, mode="full"):
+        question = {**question, "history_revision": eligible_fingerprint(self.store, question)}
         if mode not in MODES:
             raise ValueError(f"Unknown retrieval mode {mode}")
         if not question["question"].strip() or len(question["question"]) > 4000:
             raise ValueError("Enter a question of 1–4000 characters.")
         start = time.monotonic()
         dense = mode != "bm25"
-        metadata = self.store.db.execute(
-            "SELECT session_id, iso, content_hash FROM sessions WHERE split=? AND history_id=? AND iso<=? "
-            "ORDER BY iso,position,session_id", (question["split"], question["history_id"], question["iso"])).fetchall()
-        # Include the actual source revision, even when a caller reuses this Retriever after ingestion.
-        revision = digest([list(row) for row in metadata])
+        # Share one canonical identity across retrieval caches, reports and stale checks.
+        revision = question["history_revision"]
         key = (question["split"], question["history_id"], question["iso"], dense, revision)
         if self._cache is None or self._cache[0] != key:
             chunks, vectors = self.index.candidates(question, dense)
@@ -231,7 +233,7 @@ class Retriever:
                  "coverage_warning": ("Population totals require an explicitly recorded total or complete coverage; "
                                       "this retrieval is a bounded selection."
                                       if AGGREGATION.search(question["question"]) else None),
-                 "selected_excerpts": [{k: s[k] for k in ("id", "start", "end", "turn_ids", "cues")} for s in selected],
+                 "selected_excerpts": [{k: s[k] for k in ("id", "start", "end", "turn_ids", "cues", "source_hash", "source_spans")} for s in selected],
                  "searches": searches,
                  "seconds": round(time.monotonic()-start, 3), "message_chars": message_size(question, evidence),
                  "evidence_chars": sum(len(e["text"]) for e in evidence),

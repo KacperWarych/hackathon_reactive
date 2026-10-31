@@ -1,0 +1,36 @@
+# Independent hackathon plan review — 31 October 2026
+
+**Approved with the scope and acceptance refinements below.** The correct target is a reliable, clearly bounded demo, not completion of the 49-item audit. Keep the current models fixed. This review makes no application changes and does not establish remedy gains. Root's fresh check still finds unchanged audited source and the installed `decision_only` UI failure; earlier source-only passing tests do not mean fixes have landed.
+
+Reviewed [implementation plan](hackathon-plan-2026-10-31.md), the full audit/roadmap, and the public-corpus RET-01 follow-up. Reviewer: GPT-6 Astra/high. The ingestion researcher (GPT-6.1 Sol/high) independently challenged import scope and supplied the focused acceptance cases below. Model allocation is a role choice, not a measured superiority claim.
+
+## Minimal scope
+
+- **Always:** A, installed-package repair and normal-launch smoke validation. Repeat the install/restart gate after code changes, not only at the start.
+- **For the assumed individual-history → new entry → revised state demo:** B, C, E and F are appropriate. Keep B to structured quote provenance and source/date-sensitive duplicate handling. Keep E to one consistent eligible-source fingerprint and enforced sequential operations in the one-process demo.
+- **D is conditional:** generic import/reimport is not executed by a fixed preingested demo, and `add_entry` already generates turn IDs and uses its own transaction. Make importer fixes mandatory only when preparation/reimport is part of rehearsal/live flow or when preserving public metadata requires a new import. Do not make broad importer infrastructure a prerequisite for the manual-entry-only demo.
+- **Polish resolution states:** RET-07 belongs inside B if this is what judges will see. It is not optional cosmetic work in a Polish demo.
+- **Campaign totals/customer analytics:** ING-20 and RET-05 are mandatory if promised. Authoritative public customer IDs and a tested latest-per-customer/as-of aggregation route are prerequisites. If that route will not be built, explicitly limit the demo to individual-history questions; increasing the excerpt cap is not an aggregate implementation.
+- **RET-01 target-first packing:** retain its known regression and fix next if long monologues are in the demo or the packer is already being changed. The latest Salesgen scan found no selected-unit clipping under its scoped enumeration; it did not disprove the synthetic bug or measure answer accuracy. Do not bundle unrelated retrieval/model experiments into this change.
+
+A shorter deadline should reduce the demonstrated feature set, not remove acceptance checks for features still shown. Estimates in the main plan are planning judgments with integration uncertainty, not measured implementation time or benefit.
+
+## Acceptance gotchas
+
+**B — provenance and duplicates.** Check the quote against original **selected user-turn spans**, bound to their source content hash, and against the supplied excerpt. A quote anywhere in the full session is insufficient, and changing the role-label regex cannot establish real speaker provenance. Preserve genuine user quotes while rejecting an assistant-only turn containing newline `user:`. Exact wording from separate sources/dates can describe separate events; deduplication by text, or by date alone, is insufficient. Structured provenance still does not prove same-concern resolution or eliminate negation outside a shortened quote; keep the supporting context visible and avoid stronger semantic claims.
+
+**C — canonical answer content.** Use one supported citation grammar for validation, local scoring and export. Cover grouped citations, `[E1]` alone, `[E1].`, an actual numeric answer such as `1 [E2]`, normal text, and explicit abstention. Removing evidence labels must not remove factual numbers. Validate meaningful content after stripping; preserving a final punctuation mark should not make a citation-only answer complete. Keep official vendor scoring rules unchanged.
+
+**D — transaction ownership.** The smallest importer repair is required/unique turn-ID validation plus an explicit question-file rollback boundary. The researcher confirmed these changes are irrelevant to the static/manual-entry-only path until generic import is used. If adopting a whole-demo-import transaction instead, nested `with connection` blocks or `executescript` must not commit midway. SQLite changes and a separate gold file are not one atomic transaction: validate/stage both, keep a new staging split nonselectable/incomplete until publication succeeds, and discard failed staging state. Do not promise cross-filesystem/database atomicity. Acceptance must fail a late question, then initialize Memory, perform an unrelated commit and reopen independently; failed question writes must remain absent. Also verify valid repeated imports remain idempotent.
+
+**E — actual update flow.** Fingerprint every eligible `(session_id, canonical_date, content_hash)` for the question's history/time scope. Check additions and deletions as well as same-ID edits; adding a new session is the real demo path. Keep saved reports' original snapshot identity and distinguish them from current-data refreshes. A mismatch must not silently resend a paid request. Serialize operations at the service boundary, not merely by disabling buttons, and keep concurrent CLI import writers outside this explicitly single-process demo. Full multi-process locking is deferred.
+
+**Packing/cache versioning.** A sentence-boundary fix in `Memory.records` requires a `memory.SCHEME` bump and regeneration of affected memory records. Change `chunk_scheme` and reindex/re-embed only when chunk generation or embedding inputs actually change. This avoids unnecessary model work and prevents stale sentence units without conflating two cache layers.
+
+**F — release evidence.** Run focused deterministic regressions with temporary data/fake transport, then tests against the normally imported installed package and the chosen demo flow. Use a fresh run/evaluation namespace to avoid stale cached metrics. Save actual outcomes and code/model/data identities, including one new diagnostic beyond the existing counterexamples. A real-service rehearsal is separate; no live cost/latency or measured quality gain was established by this review.
+
+## Researcher exchange and conclusion
+
+The ING researcher agreed that ING-03/04 should be conditional for fixed preindexed and manual-entry-only demonstrations, and mandatory for generic setup/prepare/reimport. Recommended minimum checks: reject missing/duplicate IDs without altering the prior history; prove a failed question file cannot be committed later by Memory initialization; verify valid repeat imports. This scope correction was sent to the coordinator and incorporated into ticket D.
+
+The plan should therefore prioritize **working installed runtime → bounded evidence/output correctness → source-consistent live update → installed demo acceptance**, with aggregation and importer work activated by the feature set actually promised. Defer model switching, generalized infrastructure, broad semantic verification and unmeasured performance rewrites.

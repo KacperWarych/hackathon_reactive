@@ -6,9 +6,11 @@ import statistics
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from .answer_content import answer_content, has_answer_content
 from .config import atomic_json, data_root, digest
 from .reactor import result_path
 from .retrieval import MODES
+from .snapshot import is_current
 from .vendor.score import answer_matched, evidence_f1
 
 
@@ -167,18 +169,23 @@ def evaluate_answers(store, run_id):
     meta = json.loads((run_dir / "run.json").read_text())
     annotations = gold(meta["split"])
     details = []
+    stale = []
     for q in store.questions(meta["split"], meta["question_ids"]):
         path = result_path(run_dir, q["question_id"])
         if not path.exists():
             continue
         record = json.loads(path.read_text())
         result = record["result"]
-        if result["status"] != "answered":
+        if result["status"] != "answered" or not has_answer_content(result.get("answer")):
+            continue
+        retrieval = record.get("retrieval", {})
+        if not retrieval.get("question") or not is_current(store, retrieval):
+            stale.append(q["question_id"])
             continue
         a = annotations[q["question_id"]]
         abstain = bool(result.get("abstained"))
         label = ("correct_abstention" if abstain else "missed_abstention") if a["abstain"] else (
-            "unnecessary_abstention" if abstain else "automatic_match" if answer_matched(result["answer"], a) else "unjudged")
+            "unnecessary_abstention" if abstain else "automatic_match" if answer_matched(answer_content(result["answer"]), a) else "unjudged")
         details.append({"question_id": q["question_id"], "question_type": a["question_type"], "judgment": label,
                         "gold_abstain": a["abstain"], "predicted_abstain": abstain,
                         "evidence_f1": evidence_f1([c["id"] for c in result.get("citations", [])], a["evidence"]) if not a["abstain"] else None,
@@ -188,12 +195,15 @@ def evaluate_answers(store, run_id):
     correct = sum(r["predicted_abstain"] and r["gold_abstain"] for r in details)
     latencies = [r["latency_s"] for r in details if r["latency_s"] is not None]
     report = {"run_id": run_id, "expected": len(meta["question_ids"]), "completed": len(details),
+              "complete": {r["question_id"] for r in details} == set(meta["question_ids"]),
+              "missing": len(set(meta["question_ids"]) - {r["question_id"] for r in details}),
+              "stale": len(stale), "stale_question_ids": stale,
               "judgments": dict(Counter(r["judgment"] for r in details)), "details": details,
               "abstention_precision": correct / positive if positive else None,
               "abstention_recall": correct / target if target else None,
               "mean_latency_s": statistics.mean(latencies) if latencies else None,
               **latency_summary(latencies),
               "mean_evidence_f1": statistics.mean(r["evidence_f1"] for r in details if r["evidence_f1"] is not None) if any(r["evidence_f1"] is not None for r in details) else None,
-              "note": "Automatic matches are not complete official LLM-judged accuracy. Transport failures are incomplete."}
+              "note": "Automatic matches are not complete official LLM-judged accuracy. Transport failures and historical or unknown source snapshots are incomplete."}
     atomic_json(run_dir / "evaluation.json", report)
     return report

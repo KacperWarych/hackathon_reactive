@@ -1,3 +1,18 @@
+
+## Latest user direction: shorten the sales cycle
+
+The user prefers the current sales-cycle business case. This supersedes the agency-first recommendation and the requirement to investigate non-sales ideas each cycle. Paid-business viability remains primary. Agency pilot/price materials are parked alternatives, not the recommended offer.
+
+Working thesis: help a seller move an active opportunity to its next decision by keeping changing buyer requirements, unresolved conditions and the next clarification visible with source evidence. Test a specific stage and bottleneck before claiming overall sales-cycle reduction.
+
+Implemented foundation: dated retrieval, cited decision briefs, manual entry-and-refresh and version history. Unproven/missing: reliable account isolation, semantic resolution checks, automated monitoring and measurable sales impact.
+
+Next priorities: identify a buyer segment and a recurring stage delay; replay a changed requirement through the existing report flow; compare against the seller's actual CRM/checklist and fresh stateless retrieval. Measure preparation time, relevant next-action quality, time from buyer update to human-reviewed follow-up, and days stalled at the chosen stage. Overall cycle length and win rate require real outcome data with deal complexity and other confounders considered. No measured uplift exists.
+
+Automation pause state remains unchanged.
+
+---
+
 # Broad exploration priorities — 2026-10-31 update
 
 This section supersedes the earlier sales-only ordering below. Earlier items remain as historical candidate work, not the chosen roadmap.

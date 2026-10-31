@@ -86,6 +86,38 @@ def test_adopts_saved_reports_without_live_calls_and_keeps_seed(setup):
     assert not adapter.calls
 
 
+@pytest.mark.parametrize("persistent", [False, True])
+def test_closed_decision_history_restarts_once_without_repeating_answer(setup, monkeypatch, persistent):
+    report, service, adapter = setup
+    original_call = adapter.call
+    closed = []
+
+    def call(*args):
+        if "--question-id" in args and args[args.index("--question-id") + 1].endswith("decision_record"):
+            if persistent or not closed:
+                adapter.calls.append(args)
+                closed.append(True)
+                return {"status": "closed"}
+        return original_call(*args)
+
+    monkeypatch.setattr(adapter, "call", call)
+    if persistent:
+        with pytest.raises(InvestigationError, match="service status: closed"):
+            service.revise(report)
+    else:
+        updated = service.revise(report)
+        assert updated["revision_number"] == 1
+    revision = service.document(report)["revisions"][-1]
+    assert revision["status"] == ("failed" if persistent else "complete")
+    assert revision["answer_record"]["result"]["status"] == "answered"
+    assert sum(c[0] == "--new-history" for c in adapter.calls) == 2
+    assert [r["section"] for r in revision["requests"]] == [
+        "answer_record", "decision_record", "decision_record",
+    ]
+    assert revision["requests"][-1]["kind"] == "connection_recovery"
+    assert revision["answer_record"]["reactor_history"] != revision["decision_record"]["reactor_history"]
+
+
 def test_answer_history_and_followups_share_memory_but_keep_distinct_revisions(setup):
     report, service, adapter = setup
     first = service.revise(report)
@@ -125,9 +157,9 @@ def test_new_conversation_is_retrieved_and_date_backwards_resets_memory(setup, s
     service.retriever._cache = None
     second = service.revise(first, "What is still waiting?", "2023-06-03 10:00")
     assert "new-update" in {e["id"] for e in second["retrieval"]["evidence"]}
-    assert sum(c[0] == "--new-history" for c in adapter.calls) == 1
-    third = service.revise(second, question_date="2023-05-21 10:00")
     assert sum(c[0] == "--new-history" for c in adapter.calls) == 2
+    third = service.revise(second, question_date="2023-05-21 10:00")
+    assert sum(c[0] == "--new-history" for c in adapter.calls) == 3
     assert "new-update" not in {e["id"] for e in third["retrieval"]["evidence"]}
     assert "s2" not in {e["id"] for e in third["retrieval"]["evidence"]}
 
@@ -335,3 +367,77 @@ def test_malformed_decision_has_one_audited_repair(setup, persistent):
     assert [q["kind"] for q in revision["requests"]] == ["initial", "initial", "decision_repair"]
     assert revision["status"] == ("failed" if persistent else "complete")
     assert len(adapter.calls) == 4
+
+
+@pytest.mark.parametrize('change', ['add', 'delete', 'date', 'content'])
+def test_historical_decision_requires_refresh_without_paid_request(setup, store, change):
+    from decision_memory.snapshot import is_current
+    report, service, adapter = setup
+    first = service.revise(report)
+    original = copy.deepcopy(first['retrieval']['question'])
+    if change == 'add':
+        put_session(store, 'h1', 'extra', 'New camera approval.')
+    elif change == 'delete':
+        store.db.execute("DELETE FROM sessions WHERE session_id='s1'")
+        store.db.commit()
+    elif change == 'date':
+        store.db.execute("UPDATE sessions SET date='2023-05-21 10:00', iso='2023-05-21T10:00' WHERE session_id='s1'")
+        store.db.commit()
+    else:
+        put_session(store, 'h1', 's1', 'The camera budget was corrected.')
+    calls = len(adapter.calls)
+    with pytest.raises(InvestigationError, match='historical'):
+        service.revise(first, decision_only=True)
+    assert len(adapter.calls) == calls
+    assert first['retrieval']['question'] == original
+    assert not is_current(store, first['retrieval'])
+    Index(store, service.retriever.models, service.config).build('dev')
+    refreshed = service.revise(first)
+    assert is_current(store, refreshed['retrieval'])
+    assert first['retrieval']['question'] == original
+
+
+def test_answer_is_published_before_decision_request_and_is_durable(setup):
+    report, service, adapter = setup
+    published = []
+    original = adapter.call
+
+    def call(*args):
+        if "--question-id" in args and args[args.index("--question-id") + 1].endswith("decision_record"):
+            assert len(published) == 1
+            assert published[0]["decision_record"] is None
+        return original(*args)
+
+    def on_answer(ready):
+        journal = json.loads(service._path(report).read_text())
+        assert journal["revisions"][-1]["answer_record"] == ready["answer_record"]
+        assert ready["answer_record"]["result"]["status"] == "answered"
+        published.append(ready)
+
+    adapter.call = call
+    complete = service.revise(report, on_answer=on_answer)
+    assert published[0]["answer_record"] == complete["answer_record"]
+    assert complete["decision_record"]["result"]["status"] == "answered"
+    assert published[0]["decision_record"] is None  # independent snapshot
+
+
+def test_answer_callback_waits_for_validation_and_survives_decision_failure(setup):
+    report, service, adapter = setup
+    adapter.uncited = True
+    adapter.fail = "decision"
+    published = []
+    with pytest.raises(InvestigationError):
+        service.revise(report, on_answer=published.append)
+    assert len(published) == 1
+    assert published[0]["answer_record"]["result"]["citations"]
+    journal = service.document(report)
+    assert journal["revisions"][-1]["answer_record"] == published[0]["answer_record"]
+
+
+def test_invalid_answer_is_not_published(setup):
+    report, service, adapter = setup
+    adapter.fail = "answer"
+    published = []
+    with pytest.raises(InvestigationError):
+        service.revise(report, on_answer=published.append)
+    assert not published

@@ -16,8 +16,10 @@ from contextlib import contextmanager
 
 from .config import Config, atomic_json, data_root, digest
 from .decision import DECISION_REPAIR, decision_prompt, validate_decision
+from .operations import serialized_operation
 from .reactor import Reactor, checked_result, citation_repair_question
 from .retrieval import reactor_question
+from .snapshot import eligible_fingerprint, is_current
 from .store import iso_date
 from .vendor.reactor_client import build_message
 
@@ -135,7 +137,8 @@ class Investigations:
         with self._lock(report):
             return self._read(report)
 
-    def revise(self, report, prompt="", question_date=None, recover=False, decision_only=False):
+    @serialized_operation
+    def revise(self, report, prompt="", question_date=None, recover=False, decision_only=False, on_answer=None):
         if not self.retriever:
             raise ValueError("A retriever is required to revise a report.")
         prompt = prompt.strip()
@@ -184,9 +187,11 @@ class Investigations:
                     recover,
                     adapter,
                     decision_only,
+                    on_answer,
                 )
 
-    def _revise(self, report, doc, parent, question, context, prompts, prompt, recover, adapter, decision_only=False):
+    def _revise(self, report, doc, parent, question, context, prompts, prompt, recover, adapter,
+                decision_only=False, on_answer=None):
         path = self._path(report)
         sessions = {
             s["session_id"]: s
@@ -194,7 +199,15 @@ class Investigations:
             if s["iso"] <= question["iso"]
         }
         eligible = {sid: digest([s["iso"], s["content_hash"]]) for sid, s in sessions.items()}
-        question["history_revision"] = digest(eligible)
+        if decision_only and not is_current(self.store, parent["retrieval"]):
+            raise InvestigationError(
+                "This report is historical: its source snapshot changed or is unknown. "
+                "Use Revise report to refresh before building a decision view."
+            )
+        question["history_revision"] = (
+            parent["retrieval"]["question"]["history_revision"] if decision_only
+            else eligible_fingerprint(self.store, question)
+        )
         retrieval = copy.deepcopy(
             parent["retrieval"] if decision_only else
             self.retriever.retrieve({**question, "question": context}, report["retrieval"]["trace"]["mode"])
@@ -212,7 +225,7 @@ class Investigations:
         state = json.loads(state_path.read_text()) if state_path.exists() else {}
         key = ["investigation", doc["id"], question["split"], question["history_id"]]
         reset = recover or state.get("key") != key or state.get("as_of", "") > question["iso"]
-        reset = reset or any(eligible.get(sid) != value for sid, value in state.get("sources", {}).items())
+        reset = reset or state.get("sources") != eligible
         reference_context = previous_analysis(parent, question) if reset else ""
         instructions = (
             "\nFollow-up requests guide the analysis; they are not source evidence. "
@@ -335,6 +348,21 @@ class Investigations:
                     request.update(result=result, finished_at=time.time())
                     record["result"] = checked_result(result, request_question, evidence, self.store)
                     atomic_json(path, doc)
+                    if result.get("status") == "closed" and "connection_recovery" not in revision:
+                        # A closed history cannot continue. Rebuild once and resend only
+                        # this section with its full evidence; never replay a timeout.
+                        revision["connection_recovery"] = {"status": "pending"}
+                        atomic_json(path, doc)
+                        response = adapter.call("--new-history")
+                        revision["connection_recovery"] = response
+                        atomic_json(path, doc)
+                        if response.get("status") != "history":
+                            raise InvestigationError("Reactor could not restart the closed investigation history.")
+                        state["reactor_history"] = response["history_id"]
+                        atomic_json(state_path, state)
+                        revision["reactor_history"] = state["reactor_history"]
+                        record["reactor_history"] = state["reactor_history"]
+                        transmit(body, "connection_recovery")
 
                 transmit(text, "initial")
                 # A completed but invalid response gets ONE correction, shared by
@@ -351,12 +379,17 @@ class Investigations:
                         continue
                     if result.get("status") != "answered":
                         raise InvestigationError(
-                            f"{field.replace('_record', '').capitalize()} generation did not complete with valid citations."
+                            f"{field.replace('_record', '').capitalize()} generation failed "
+                            f"(service status: {result.get('status', 'unknown')}). "
+                            "Any completed answer is saved in this revision. Restart memory and retry."
                         )
                     if error:
                         record["validation_error"] = error
                         raise InvestigationError(error)
                     break
+                if field == "answer_record" and on_answer is not None:
+                    # The validated answer is already durable; expose it before the next paid call.
+                    on_answer(revision_report(report, doc, revision))
             old_sources = {e["id"] for e in parent["retrieval"]["evidence"]}
             new_sources = {e["id"] for e in evidence}
 

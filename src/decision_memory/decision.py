@@ -28,7 +28,8 @@ def decision_prompt(topic):
         "return an empty resolutions array. "
         "For resolutions include a confirmation_quote copied exactly from a user statement in a cited excerpt. "
         "That quote must include an explicit word such as resolved, cleared, approved, accepted, confirmed, "
-        "completed, works, fixed, signed, or paid, and must not be hypothetical or negated. "
+        "completed, works, fixed, signed, paid, or Polish potwierdzam, akceptuję, rozwiązany, "
+        "and must not be hypothetical or negated. "
         "Add the cited labels in brackets after the JSON so citation mapping can verify them."
     )
 
@@ -57,13 +58,33 @@ def validate_decision(answer, evidence):
                 quote = entry.get("confirmation_quote")
                 user_blocks = []
                 for label in labels:
-                    user_blocks.extend(re.findall(r"(?:^|\n)user(?: \(continued\))?:\s*(.*?)(?=\n(?:assistant|user)(?: \(continued\))?:|\Z)",
-                                                  sources[label]["text"], re.DOTALL))
-                if not isinstance(quote, str) or len(quote) < 8 or not any(quote in block for block in user_blocks):
+                    source = sources[label]
+                    for span in source.get("source_spans", []):
+                        # Only trusted structured spans produced from original turns qualify.
+                        # Legacy evidence without provenance is intentionally unresolved.
+                        if (span.get("role") == "user" and span.get("turn_id")
+                                and source.get("source_hash")
+                                and span.get("source_hash") == source["source_hash"]
+                                and isinstance(span.get("excerpt_start"), int)
+                                and isinstance(span.get("excerpt_end"), int)
+                                and 0 <= span["excerpt_start"] < span["excerpt_end"] <= len(source["text"])
+                                and source["text"][span["excerpt_start"]:span["excerpt_end"]] == span.get("text")):
+                            user_blocks.append(span["text"])
+                matches = [block for block in user_blocks if isinstance(quote, str) and quote in block]
+                if not isinstance(quote, str) or len(quote) < 8 or not matches:
                     return None, "A proposed resolution lacks a matching user confirmation quote."
-                if (re.search(r"\b(if|might|could|would|should|maybe|hopefully|once|unresolved)\b", quote, re.IGNORECASE)
-                        or re.search(r"\b(not|never|haven't|hasn't|isn't|wasn't)\b", quote, re.IGNORECASE)):
+                speculative = (r"\b(if|might|could|would|should|maybe|hopefully|once|unresolved|"
+                               r"not|never|haven't|hasn't|isn't|wasn't|don't|didn't|"
+                               r"nie|nigdy|gdyby|jeśli|jezeli|jeżeli|może|moze|być może|"
+                               r"chyba|prawdopodobnie|ewentualnie)\b")
+                # Check the selected turn context as well as the quote: a shortened
+                # quote must not hide a nearby negation or conditional premise.
+                if all(re.search(speculative, block, re.IGNORECASE) for block in matches):
                     return None, "A proposed resolution uses speculative or negated language."
-                if not re.search(r"\b(resolved|cleared|approved|accepted|confirmed|completed|works|working|fixed|signed|paid)\b", quote, re.IGNORECASE):
+                positive = (r"\b(resolved|cleared|approved|accepted|confirmed|completed|works|working|fixed|signed|paid|"
+                            r"potwierdzam|akceptuję|akceptuje|zatwierdzam|zaakceptowane|zaakceptowana|"
+                            r"zatwierdzone|zatwierdzona|rozwiązany|rozwiązana|rozwiązane|rozwiązaliśmy|"
+                            r"naprawione|naprawiona|podpisane|podpisana|zapłacone)\b")
+                if not re.search(positive, quote, re.IGNORECASE):
                     return None, "A proposed resolution lacks an explicit confirmation statement."
     return obj, None

@@ -1,12 +1,16 @@
 """Local evidence explorer. Run with: .venv/bin/streamlit run app.py"""
 import json
 import os
+import sys
 import uuid
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import streamlit as st
+
+# Keep this checkout's UI and package in sync even after a regular installation.
+sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 from decision_memory.config import Config, data_root, digest, load_env
 from decision_memory.decision import SECTIONS, validate_decision
@@ -160,8 +164,6 @@ if page in ("Ask", "Add entry"):
                 stamp = f"{date.isoformat()} {hour:%H:%M}"
                 question = {"split": split, "history_id": hid, "question": text.strip(), "question_date": stamp,
                             "iso": iso_date(stamp), "question_id": "custom_" + digest([split, hid, text.strip(), stamp])[:16]}
-                if store.db.execute("SELECT 1 FROM manual_entries WHERE split=? AND history_id=? LIMIT 1", (split, hid)).fetchone():
-                    question["history_revision"] = digest([(s["session_id"], s["iso"], s["content_hash"]) for s in sessions])
                 try:
                     with st.spinner("Connecting the evidence…"):
                         retrieval = Retriever(store, models(), CONFIG).retrieve(question, mode)

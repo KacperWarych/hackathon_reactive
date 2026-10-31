@@ -211,3 +211,106 @@ def test_latency_percentiles_cover_small_samples():
     assert latency_summary([]) == {'p50_seconds': None, 'p95_seconds': None}
     assert latency_summary([None, 2.]) == {'p50_seconds': 2., 'p95_seconds': 2.}
     assert latency_summary([1., 3.])['p50_seconds'] == 2.
+
+
+def test_identical_wording_on_distinct_dates_retains_latest_provenance(store):
+    text = "The camera integration concern is resolved."
+    put_session(store, 'h1', 'older', text, '2023/05/01 (Mon) 10:00')
+    put_session(store, 'h1', 'newer', text, '2023/05/29 (Mon) 10:00')
+    q = put_question(store, text='What is the latest camera integration state?')
+    model = FakeModels()
+    Index(store, model, Config()).build('dev')
+    result = Retriever(store, model).retrieve(q, 'bm25')
+    assert {'older', 'newer'} == {e['id'] for e in result['evidence']}
+    for evidence in result['evidence']:
+        assert evidence['source_hash']
+        for span in evidence['source_spans']:
+            assert span['source_hash'] == evidence['source_hash']
+            assert evidence['text'][span['excerpt_start']:span['excerpt_end']] == span['text']
+            assert span['role'] == 'user'
+
+
+def test_packed_source_roles_ignore_embedded_user_labels(store):
+    from decision_memory.decision import SECTIONS, validate_decision
+    quote = 'The camera integration concern is resolved.'
+    save_turns(store, [{'turn_id': 'seller', 'role': 'assistant',
+                        'content': 'Transcript example:\nuser: ' + quote}])
+    q = put_question(store, text='Is the camera integration resolved?')
+    model = FakeModels()
+    Index(store, model, Config()).build('dev')
+    evidence = Retriever(store, model).retrieve(q, 'bm25')['evidence']
+    assert evidence and all(s['role'] == 'assistant' for e in evidence for s in e['source_spans'])
+    obj = {key: [] for key in SECTIONS}
+    obj['resolutions'] = [{'text': 'Resolved', 'sources': ['E1'], 'confirmation_quote': quote}]
+    assert validate_decision(json.dumps(obj), evidence)[0] is None
+
+
+def test_packed_genuine_user_confirmation_is_valid(store):
+    from decision_memory.decision import SECTIONS, validate_decision
+    quote = 'Potwierdzam, problem integracji został rozwiązany.'
+    put_session(store, 'h1', 'confirmed', quote)
+    q = put_question(store, text='Czy problem integracji jest rozwiązany?')
+    model = FakeModels()
+    Index(store, model, Config()).build('dev')
+    evidence = Retriever(store, model).retrieve(q, 'bm25')['evidence']
+    obj = {key: [] for key in SECTIONS}
+    obj['resolutions'] = [{'text': 'Resolved', 'sources': ['E1'], 'confirmation_quote': quote}]
+    assert validate_decision(json.dumps(obj), evidence)[1] is None
+
+
+def test_target_unit_survives_preceding_context_budget(store):
+    from decision_memory.evidence import extract_options
+    from conftest import Tokenizer
+    turns = [{'turn_id': 'prior', 'role': 'assistant', 'content': 'one two three four five six seven eight nine'},
+             {'turn_id': 'target', 'role': 'user', 'content': 'Camera integration is approved and fully resolved.'}]
+    full = ''.join(f"{t['role']}: {t['content']}\n" for t in turns)
+    start = full.index('user:')
+    config = replace(Config(), excerpt_tokens=12, context_tokens=10)
+    tokenizer = Tokenizer()
+    memory = Memory(store, tokenizer)
+    options = extract_options({'question': 'camera integration'}, [0],
+                              [{'session_id': 's', 'date': '2023-05-01', 'start': start, 'end': len(full)}],
+                              {'s': turns}, tokenizer, config, memory)
+    assert turns[1]['content'] in options[0]['text']
+    assert len(tokenizer.encode(options[0]['text'])) <= config.excerpt_tokens
+    assert options[0]['source_spans'][0]['turn_id'] == 'target'
+
+
+def test_latest_duplicate_wins_when_only_one_excerpt_fits(store):
+    text = 'The camera integration concern is resolved.'
+    put_session(store, 'h1', 'older', text, '2023/05/01 (Mon) 10:00')
+    put_session(store, 'h1', 'newer', text, '2023/05/29 (Mon) 10:00')
+    q = put_question(store, text='What is the latest camera integration state?')
+    model = FakeModels()
+    config = replace(Config(), max_excerpts=1)
+    Index(store, model, config).build('dev')
+    evidence = Retriever(store, model, config).retrieve(q, 'bm25')['evidence']
+    assert [e['id'] for e in evidence] == ['newer']
+
+
+def test_latest_plain_fact_duplicate_prefers_newest_without_update_cues(store):
+    text = 'The camera lens costs 1000.'
+    put_session(store, 'h1', 'older', text, '2023/05/01 (Mon) 10:00')
+    put_session(store, 'h1', 'newer', text, '2023/05/29 (Mon) 10:00')
+    q = put_question(store, text='What is the latest camera lens price?')
+    model = FakeModels()
+    config = replace(Config(), max_excerpts=1)
+    Index(store, model, config).build('dev')
+    retriever = Retriever(store, model, config)
+    evidence = retriever.retrieve(q, 'bm25')['evidence']
+    assert [e['id'] for e in evidence] == ['newer']
+    assert evidence[0]['date'] == '2023/05/29 (Mon) 10:00'
+    # Non-temporal questions still follow the original relevance ranking.
+    evidence = retriever.retrieve({**q, 'question': 'What is the camera lens price?'}, 'bm25')['evidence']
+    assert [e['id'] for e in evidence] == ['older']
+
+
+def test_latest_plain_fact_does_not_promote_unrelated_newer_wording(store):
+    put_session(store, 'h1', 'price', 'The camera lens price costs 1000.', '2023/05/01 (Mon) 10:00')
+    put_session(store, 'h1', 'other', 'The camera lens color is blue.', '2023/05/29 (Mon) 10:00')
+    q = put_question(store, text='What is the latest camera lens price?')
+    model = FakeModels()
+    config = replace(Config(), max_excerpts=1)
+    Index(store, model, config).build('dev')
+    evidence = Retriever(store, model, config).retrieve(q, 'bm25')['evidence']
+    assert [e['id'] for e in evidence] == ['price']

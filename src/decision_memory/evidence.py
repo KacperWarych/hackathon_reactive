@@ -4,6 +4,7 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 
+from .config import digest
 from .memory import cues
 
 STOP = {
@@ -63,6 +64,11 @@ def extract_options(question, ranked, chunks, originals, tokenizer, config, memo
                 a, b, _ = spans[current + 1]
                 if len(tokenizer.encode(full[a:b], add_special_tokens=False)) <= config.context_tokens:
                     hi = b
+            # Spend the excerpt budget on the selected unit before optional context.
+            if len(tokenizer.encode(full[lo:hi], add_special_tokens=False)) > config.excerpt_tokens:
+                lo = unit["start"]
+            if len(tokenizer.encode(full[lo:hi], add_special_tokens=False)) > config.excerpt_tokens:
+                hi = unit["end"]
             a, b, turn = next(x for x in spans if x[0] <= lo < x[1])
             prefix = "" if lo == a else f"{turn['role']} (continued): "
             text = prefix + full[lo:hi]
@@ -71,9 +77,22 @@ def extract_options(question, ranked, chunks, originals, tokenizer, config, memo
             if len(offsets) > config.excerpt_tokens:
                 hi = lo + offsets[config.excerpt_tokens - 1][1] - len(prefix)
                 text = prefix + full[lo:hi]
+            source_hash = digest(originals[sid])
+            source_spans = []
+            for a, b, turn in spans:
+                content_start = a + len(f"{turn['role']}: ")
+                left, right = max(lo, content_start), min(hi, content_start + len(turn["content"]))
+                if left < right:
+                    source_spans.append({"role": turn["role"], "turn_id": turn["turn_id"],
+                                         "source_hash": source_hash, "source_start": left, "source_end": right,
+                                         "turn_start": left - content_start, "turn_end": right - content_start,
+                                         "excerpt_start": len(prefix) + left - lo,
+                                         "excerpt_end": len(prefix) + right - lo,
+                                         "text": full[left:right]})
             covered = query & keywords(text)
             options.append({"id": sid, "date": row["date"], "iso": row.get("iso", row["date"]),
                             "text": text, "start": lo, "end": hi, "covered": covered,
+                            "source_hash": source_hash, "source_spans": source_spans,
                             "cues": cues(text), "user_update": unit["role"] == "user" and
                             bool(set(unit["cues"]) & {"update", "confirmation", "concern"}),
                             "turn_ids": [t["turn_id"] for a, b, t in spans if a < hi and b > lo],
@@ -82,26 +101,36 @@ def extract_options(question, ranked, chunks, originals, tokenizer, config, memo
 
 
 def select_options(question, options, config, tokenizer, size):
-    selected, covered, seen = [], set(), set()
+    selected, covered = [], set()
     temporal = bool(TEMPORAL.search(question["question"]))
 
     def redundant(option):
-        normalized = re.sub(r"\s+", " ", option["text"]).strip().casefold()
-        # Identical wording can describe separate events; retain separate sources for count questions.
-        if normalized in seen and not AGGREGATION.search(question["question"]):
-            return True
-        return any(option["id"] == old["id"] and
-                   max(0, min(option["end"], old["end"]) - max(option["start"], old["start"])) /
-                   max(1, min(option["end"]-option["start"], old["end"]-old["start"])) > .5 for old in selected)
+        # Collapse only the same source occurrence (or a fully contained excerpt).
+        # Partial overlap can carry a unique update tail and must remain eligible.
+        return any(option["id"] == old["id"] and option["iso"] == old["iso"] and
+                   option["source_hash"] == old["source_hash"] and
+                   old["start"] <= option["start"] and option["end"] <= old["end"]
+                   for old in selected)
 
     def render(items):
         grouped = defaultdict(list)
         for item in items:
             grouped[item["id"]].append(item)
-        return [{"id": sid, "date": group[0]["date"],
-                 "text": "\n[... excerpt gap ...]\n".join(x["text"] for x in sorted(group, key=lambda x: x["start"])),
-                 "turn_ids": list(dict.fromkeys(t for x in group for t in x["turn_ids"]))}
-                for sid, group in grouped.items()]
+        result = []
+        for sid, group in grouped.items():
+            text, spans = "", []
+            for item in sorted(group, key=lambda x: x["start"]):
+                if text:
+                    text += "\n[... excerpt gap ...]\n"
+                offset = len(text)
+                spans.extend({**span, "excerpt_start": span["excerpt_start"] + offset,
+                              "excerpt_end": span["excerpt_end"] + offset}
+                             for span in item["source_spans"])
+                text += item["text"]
+            result.append({"id": sid, "date": group[0]["date"], "text": text,
+                           "source_hash": group[0]["source_hash"], "source_spans": spans,
+                           "turn_ids": list(dict.fromkeys(t for x in group for t in x["turn_ids"]))})
+        return result
 
     remaining = list(options)
     while remaining and len(selected) < config.max_excerpts:
@@ -109,9 +138,16 @@ def select_options(question, options, config, tokenizer, size):
         # Reward missing question facets and reserve room for a later buyer update.
         def utility(o, latest=latest):
             return (1 / (1 + o["rank"] * .12) + .3 * len(o["covered"] - covered) +
-                    (1.1 if temporal and selected and o["user_update"] and o["covered"] and o["iso"] == latest and
+                    (1.1 if temporal and o["user_update"] and o["covered"] and o["iso"] == latest and
                      not any(s["user_update"] and s["iso"] >= latest for s in selected) else 0))
         option = max(remaining, key=utility)
+        if temporal:
+            # Preserve relevance ranking, but use the newest occurrence of the
+            # winning wording even when a plain fact has no update cue.
+            wording = re.sub(r"\s+", " ", option["text"]).strip().casefold()
+            identical = [item for item in remaining
+                         if re.sub(r"\s+", " ", item["text"]).strip().casefold() == wording]
+            option = max(identical, key=lambda item: (item["iso"], -item["rank"]))
         remaining.remove(option)
         if redundant(option):
             continue
@@ -123,7 +159,6 @@ def select_options(question, options, config, tokenizer, size):
             continue
         selected.append(option)
         covered.update(option["covered"])
-        seen.add(re.sub(r"\s+", " ", option["text"]).strip().casefold())
     return render(selected), selected
 
 
