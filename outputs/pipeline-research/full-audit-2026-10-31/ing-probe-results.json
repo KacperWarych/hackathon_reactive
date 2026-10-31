@@ -1,0 +1,202 @@
+{
+  "ING-01": {
+    "question_ids_after_reimport": [
+      "q1",
+      "q2"
+    ],
+    "gold_question_ids": [
+      "q1"
+    ]
+  },
+  "ING-02": {
+    "exported_manual_sid": "manual_f6ddcfb056dd90c2e322dca8",
+    "reimport": {
+      "error": "IntegrityError",
+      "message": "UNIQUE constraint failed: sessions.split, sessions.history_id, sessions.session_id"
+    }
+  },
+  "ING-03": {
+    "ingest": {
+      "returned": {
+        "histories": 1,
+        "sessions": 1,
+        "questions": 0
+      }
+    },
+    "index": {
+      "error": "KeyError",
+      "message": "'turn_id'"
+    },
+    "duplicate_turn_ids_ingest": {
+      "returned": {
+        "histories": 1,
+        "sessions": 1,
+        "questions": 0
+      }
+    },
+    "orphan_question_ingest": {
+      "returned": {
+        "histories": 0,
+        "sessions": 0,
+        "questions": 1
+      }
+    }
+  },
+  "ING-04": {
+    "ingest_error": {
+      "error": "ValueError",
+      "message": "Unsupported date: 'not-a-date'"
+    },
+    "transaction_left_pending": true,
+    "questions_visible_after_memory_init": [
+      "partial"
+    ]
+  },
+  "ING-05": {
+    "unknown_role": [
+      {
+        "turn_id": "t_1",
+        "role": "user",
+        "content": "Camera integration blocked.\nManager: Approved the budget."
+      }
+    ]
+  },
+  "ING-06": {
+    "config": {
+      "target_tokens": 800,
+      "max_tokens": 600
+    },
+    "maximum_actual_chunk_tokens": 802,
+    "zero_batch_index": {
+      "error": "ValueError",
+      "message": "range() arg 3 must not be zero"
+    }
+  },
+  "ING-07": {
+    "writers": [
+      {
+        "writer": 1,
+        "returned": null
+      },
+      {
+        "writer": 0,
+        "error": "FileNotFoundError",
+        "message": "[Errno 2] No such file or directory: '/var/folders/27/68qt4mnx62s9h3lks7drp1xr0000gn/T/full-pipeline-ing-vo_s4l7l/concurrent.json.tmp' -> '/var/folders/27/68qt4mnx62s9h3lks7drp1xr0000gn/T/full-pipeline-ing-vo_s4l7l/concurrent.json'"
+      }
+    ],
+    "final": {
+      "writer": 1
+    }
+  },
+  "ING-08": {
+    "workers": [
+      {
+        "worker": 0,
+        "returned": {
+          "histories": 1,
+          "sessions": 1,
+          "new_vectors": 0,
+          "new_memory_turns": 1,
+          "cached_memory_turns": 0,
+          "seconds": 0.0,
+          "scheme": "86a9a200e3ab4306404bad588876d255f1e9a5155c3099ebed210682813724da"
+        }
+      },
+      {
+        "worker": 1,
+        "error": "IntegrityError",
+        "message": "UNIQUE constraint failed: indexed.content_hash, indexed.scheme"
+      }
+    ]
+  },
+  "ING-09": {
+    "model_snapshot": {
+      "Qwen/Qwen3-Embedding-0.6B": "revision-A",
+      "Qwen/Qwen3-Reranker-0.6B": "revision-A"
+    },
+    "current_lock": {
+      "Qwen/Qwen3-Embedding-0.6B": "revision-B",
+      "Qwen/Qwen3-Reranker-0.6B": "revision-B"
+    },
+    "fingerprint_changed_while_model_unchanged": true
+  },
+  "ING-10": {
+    "embed": {
+      "error": "RuntimeError",
+      "message": "MPS out of memory during model allocation"
+    },
+    "device_after_error": "mps"
+  },
+  "ING-11": {
+    "start_on_second_read": 99999
+  },
+  "ING-12": {
+    "returned": {
+      "histories": 0,
+      "sessions": 0,
+      "new_vectors": 0,
+      "new_memory_turns": 0,
+      "cached_memory_turns": 0,
+      "seconds": 0.0,
+      "scheme": "86a9a200e3ab4306404bad588876d255f1e9a5155c3099ebed210682813724da"
+    }
+  },
+  "ING-13": {
+    "lexical_candidate_count": 2,
+    "vector_select_in_lexical_mode": true,
+    "vector_blob_bytes_in_eligible_rows": 64
+  },
+  "ING-14": {
+    "nonfinite_vectors_accepted": true
+  },
+  "ING-15": {
+    "cue_examples": {
+      "Not approved.": [
+        "confirmation"
+      ],
+      "Unapproved budget.": [
+        "requirement"
+      ],
+      "Approved yesterday, revoked today.": [
+        "confirmation"
+      ]
+    }
+  },
+  "ING-17": {
+    "empty_archive": {
+      "returned": {
+        "histories": 0,
+        "sessions": 0,
+        "questions": 0
+      }
+    },
+    "duplicate_files": {
+      "returned": {
+        "histories": 2,
+        "sessions": 2,
+        "questions": 0
+      }
+    },
+    "retained_sessions": [
+      "two"
+    ]
+  },
+  "ING-18": {
+    "embedded_documents": 6,
+    "distinct_embedded_texts": 3,
+    "build_report": {
+      "histories": 1,
+      "sessions": 1,
+      "new_vectors": 6,
+      "new_memory_turns": 1,
+      "cached_memory_turns": 0,
+      "seconds": 0.0,
+      "scheme": "86a9a200e3ab4306404bad588876d255f1e9a5155c3099ebed210682813724da"
+    }
+  },
+  "ING-19": {
+    "referenced_content_rows": 8,
+    "all_content_rows": 11,
+    "orphan_content_rows": 3
+  }
+}

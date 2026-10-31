@@ -1,0 +1,17 @@
+# Independent heartbeat review — 2026-10-31 09:00
+
+Disposition: **no new actionable regression; do not notify the user**. Retain the existing 49-distinct-item full-audit register and RET-01's synthetic reproduction. This bounded scan narrows exposure in one public corpus; it does not resolve the bug or establish answer accuracy.
+
+Reviewer: GPT-6 Astra/high, continuing the existing reviewed group. Researcher: GPT-6.1 Sol/high. See [research report](ret01-public-report.md), [results](ret01-public-results.json), and [root snapshot](snapshot.json). Root verified unchanged source hashes and the same four installed/source discrepancies; new data/dependency hashes are a baseline, not proof those inputs were unchanged since the earlier audit.
+
+The public-only scan uses the existing cached Qwen tokenizer, default 320-token excerpts and 80-token context. It enumerates 176 sessions, 2,694 turns, 2,701 memory units, 403 default chunks, and 59 questions within one history. History and question-time scope are applied. Across 23,777 eligible question/chunk opportunities and 47,554 proposed unit options, **zero instances of selected-late-unit clipping were observed under this enumeration**. These are exhaustive candidate opportunities, not actual retrieved/reranked chunks or final packed evidence; no answer model ran.
+
+There were two short late units with a preceding turn. Their expanded contexts contained 337 and 282 tokens, while the selected units ended at token 294 and 282 respectively. Thus the 337-token case clips following context, not its selected unit. One distinct structural candidate proposed by actual public questions was also checked through real `extract_options`: default and `context_tokens=0` both preserve its exact source offsets and text. No affected candidate existed to validate as an error. This control is not a statement that every possible query was run through retrieval.
+
+I inspected the method and independently reran the saved script; counts, hashes and offset controls reproduced in [overseer-rerun.log](overseer-rerun.log). No gold, neural weights, paid transport, production database, full test suite or application edits were used.
+
+Concrete critique and response: I required matching history/time filters, distinct denominators, explicit zero counters, and separation of partial target loss from harmless context truncation. I rejected any interpretation of candidate opportunities as actual retrieval or answer-error incidence. I also requested offset checks rather than relying solely on repeated text matching, and accurate labeling of control coverage. The researcher accepted these points, added exact-offset controls and explicit zeros, and preserved the caveat that a zero result here does not invalidate RET-01 on other input structures.
+
+Method/recommendation grades (0–5): **evidence 4, fit 5, expected benefit 3, feasibility 5**. Evidence supports this scoped negative exposure result; expected benefit is prioritization information, not a measured quality or speed gain. The original defect's existence remains supported by its prior real-tokenizer counterexample. No global prevalence, safety, remediation or model-superiority inference is warranted.
+
+Next bounded work should examine another already-prioritized mechanism or a representative longer-turn corpus with an explicit identity baseline, rather than repeating this unchanged scan. No extra experiment was launched in this heartbeat.

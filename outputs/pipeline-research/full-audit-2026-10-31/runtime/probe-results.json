@@ -1,0 +1,44 @@
+{
+  "RUN-01": {
+    "additional_calls_after_source_change": 0,
+    "export": {
+      "written": 1,
+      "missing": 0,
+      "complete": true,
+      "submission_ready": false,
+      "path": "/var/folders/27/68qt4mnx62s9h3lks7drp1xr0000gn/T/pipeline-runtime-audit-p96sx7pb/export.jsonl"
+    },
+    "prediction": {
+      "question_id": "q1",
+      "abstain": false,
+      "answer": "The budget is approved .",
+      "citations": [
+        "s1"
+      ]
+    }
+  },
+  "RUN-03": {
+    "automatic_match": 1,
+    "without_citation_matches": false
+  },
+  "RUN-02": {
+    "retrieval_calls_across_two_runs": 1,
+    "same_report": true,
+    "packed_recall_after_changed_question_and_gold": 1.0
+  },
+  "RUN-04": {
+    "initial_has_coverage_constraint": true,
+    "repair_has_coverage_constraint": false,
+    "initial_has_same_fact_constraint": true,
+    "repair_has_same_fact_constraint": false
+  },
+  "RUN-05": {
+    "store_parse": "2023-05-20T10:00",
+    "transport_parse": "rejected"
+  },
+  "RUN-08": {
+    "checked_status": "answered",
+    "export_complete": true,
+    "exported_answer": ""
+  }
+}

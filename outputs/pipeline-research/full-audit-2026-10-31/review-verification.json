@@ -1,0 +1,23 @@
+{
+  "files": 25,
+  "definitions": 139,
+  "group_definitions": {
+    "ING": 38,
+    "RET": 35,
+    "RUN": 66
+  },
+  "source_hashes_changed": [],
+  "findings_registered": 50,
+  "merged": [
+    "ING-15"
+  ],
+  "distinct_accepted": 49,
+  "classifications": {
+    "confirmed_bug": 20,
+    "limitation": 22,
+    "hypothesis": 7
+  },
+  "source_suite": "88 passed in 2.61s",
+  "installed_ui_reproduction": "1 failed in 0.27s as predicted",
+  "new_ui_recovery_probe": "1 passed in 0.42s"
+}

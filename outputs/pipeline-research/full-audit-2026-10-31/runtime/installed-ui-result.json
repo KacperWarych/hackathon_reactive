@@ -1,0 +1,1 @@
+{"test":"test_build_decision_view_uses_one_request_and_can_recover","import_mode":"normal installed package, no PYTHONPATH override","failed":1,"seconds":0.34,"error":"generate_report() got an unexpected keyword argument decision_only","app_line":270,"transport":"fake","data":"temporary"}

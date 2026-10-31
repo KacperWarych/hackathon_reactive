@@ -1,0 +1,870 @@
+[
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/__init__.py",
+    "sha256": "d9b56dbcc3de40941849a1d6859d3264431f78fb1361d6f8b4cfd2e03bcd30b0",
+    "group": "RUN",
+    "definitions": []
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/chunks.py",
+    "sha256": "68fbb491cfcc06e81a9325b8a187a15ed99ca6ff2303f99254998015c3a8defd",
+    "group": "ING",
+    "definitions": [
+      {
+        "function": "chunk_turns",
+        "line": 6,
+        "end_line": 36
+      },
+      {
+        "function": "chunk_scheme",
+        "line": 39,
+        "end_line": 41
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/cli.py",
+    "sha256": "e7f7418c1553b8ae14dbbad68538ee1b3b6b25701e44e50a0091e66e5903453f",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "manifest_arg",
+        "line": 12,
+        "end_line": 15
+      },
+      {
+        "function": "selection",
+        "line": 18,
+        "end_line": 24
+      },
+      {
+        "function": "selected_mode",
+        "line": 27,
+        "end_line": 36
+      },
+      {
+        "function": "main",
+        "line": 39,
+        "end_line": 150
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+    "sha256": "24c9bcd494733daa4e7495f5218005f25958d56c0ad0f80c5cdd4ee31bdb3ec4",
+    "group": "ING",
+    "definitions": [
+      {
+        "function": "digest",
+        "line": 14,
+        "end_line": 15
+      },
+      {
+        "function": "atomic_json",
+        "line": 18,
+        "end_line": 25
+      },
+      {
+        "function": "Config.fingerprint",
+        "line": 50,
+        "end_line": 51
+      },
+      {
+        "function": "revisions",
+        "line": 54,
+        "end_line": 58
+      },
+      {
+        "function": "data_root",
+        "line": 61,
+        "end_line": 66
+      },
+      {
+        "function": "load_env",
+        "line": 69,
+        "end_line": 71
+      },
+      {
+        "function": "device",
+        "line": 74,
+        "end_line": 79
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py",
+    "sha256": "c868c25106f3cfacfe4f79924ab7d50a9c64bc705a2bcdf2522000db3df58413",
+    "group": "RET",
+    "definitions": [
+      {
+        "function": "decision_prompt",
+        "line": 13,
+        "end_line": 33
+      },
+      {
+        "function": "validate_decision",
+        "line": 36,
+        "end_line": 69
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entries.py",
+    "sha256": "e14c1291c407911b1717b57162b423ccfc46273bdf9f8f036af408bc0c083111",
+    "group": "ING",
+    "definitions": [
+      {
+        "function": "parse_transcript",
+        "line": 12,
+        "end_line": 30
+      },
+      {
+        "function": "add_entry",
+        "line": 33,
+        "end_line": 45
+      },
+      {
+        "function": "export_entries",
+        "line": 48,
+        "end_line": 53
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entry_ui.py",
+    "sha256": "71889df3d5f0eb91fae1f1d5174bdba3ee3779b39e3cccff882487c26457c2c0",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "render_entry_form",
+        "line": 11,
+        "end_line": 43
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evaluation.py",
+    "sha256": "116a3718a054e2d0326429db820cbeb9d479ac6bee89cece44144ac15a8feefc",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "latency_summary",
+        "line": 15,
+        "end_line": 24
+      },
+      {
+        "function": "latency_summary.percentile",
+        "line": 17,
+        "end_line": 23
+      },
+      {
+        "function": "gold",
+        "line": 27,
+        "end_line": 29
+      },
+      {
+        "function": "load_manifest",
+        "line": 32,
+        "end_line": 33
+      },
+      {
+        "function": "manifests",
+        "line": 36,
+        "end_line": 95
+      },
+      {
+        "function": "evidence_metrics",
+        "line": 98,
+        "end_line": 106
+      },
+      {
+        "function": "evaluate_retrieval",
+        "line": 109,
+        "end_line": 147
+      },
+      {
+        "function": "evaluate_retrieval.aggregate",
+        "line": 137,
+        "end_line": 140
+      },
+      {
+        "function": "freeze",
+        "line": 150,
+        "end_line": 162
+      },
+      {
+        "function": "evaluate_answers",
+        "line": 165,
+        "end_line": 199
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+    "sha256": "755f6a7f5d9d18b0b8c1a240c6aedac66f02762489e9589ce51bc97945791b95",
+    "group": "RET",
+    "definitions": [
+      {
+        "function": "keywords",
+        "line": 27,
+        "end_line": 28
+      },
+      {
+        "function": "extract_options",
+        "line": 31,
+        "end_line": 81
+      },
+      {
+        "function": "select_options",
+        "line": 84,
+        "end_line": 127
+      },
+      {
+        "function": "select_options.redundant",
+        "line": 88,
+        "end_line": 95
+      },
+      {
+        "function": "select_options.render",
+        "line": 97,
+        "end_line": 104
+      },
+      {
+        "function": "select_options.utility",
+        "line": 110,
+        "end_line": 113
+      },
+      {
+        "function": "expansion_reason",
+        "line": 130,
+        "end_line": 149
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/index.py",
+    "sha256": "9a3528f29e34f256298b31bdda16f717e8c025b857f86d26160af17b29e52c10",
+    "group": "ING",
+    "definitions": [
+      {
+        "function": "Index.__init__",
+        "line": 15,
+        "end_line": 17
+      },
+      {
+        "function": "Index.build",
+        "line": 19,
+        "end_line": 88
+      },
+      {
+        "function": "Index.candidates",
+        "line": 90,
+        "end_line": 114
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigation_ui.py",
+    "sha256": "8d2a6858f8c8c64c9df096e3822d6d609ee7585d539dd67d9c34716f4ca98f7e",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "generate_report",
+        "line": 14,
+        "end_line": 26
+      },
+      {
+        "function": "generate_report.LazyRetriever.retrieve",
+        "line": 21,
+        "end_line": 22
+      },
+      {
+        "function": "render_investigation",
+        "line": 29,
+        "end_line": 171
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+    "sha256": "6eb23938e825bd132c91e75b4e4ad85d7655161da575238af7ed3932b6aacb77",
+    "group": "RET",
+    "definitions": [
+      {
+        "function": "investigation_id",
+        "line": 29,
+        "end_line": 33
+      },
+      {
+        "function": "revision_report",
+        "line": 36,
+        "end_line": 47
+      },
+      {
+        "function": "previous_analysis",
+        "line": 50,
+        "end_line": 75
+      },
+      {
+        "function": "previous_analysis.excerpt",
+        "line": 63,
+        "end_line": 65
+      },
+      {
+        "function": "Investigations.__init__",
+        "line": 79,
+        "end_line": 83
+      },
+      {
+        "function": "Investigations._path",
+        "line": 85,
+        "end_line": 86
+      },
+      {
+        "function": "Investigations._lock",
+        "line": 89,
+        "end_line": 102
+      },
+      {
+        "function": "Investigations._read",
+        "line": 104,
+        "end_line": 131
+      },
+      {
+        "function": "Investigations.document",
+        "line": 133,
+        "end_line": 136
+      },
+      {
+        "function": "Investigations.revise",
+        "line": 138,
+        "end_line": 187
+      },
+      {
+        "function": "Investigations._revise",
+        "line": 189,
+        "end_line": 383
+      },
+      {
+        "function": "Investigations._revise.size",
+        "line": 231,
+        "end_line": 232
+      },
+      {
+        "function": "Investigations._revise.transmit",
+        "line": 303,
+        "end_line": 337
+      },
+      {
+        "function": "Investigations._revise.answer",
+        "line": 363,
+        "end_line": 364
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+    "sha256": "39c8f59def8f1a9ed34291955d14e6e1be05398e245944ee67909b39a3719ee9",
+    "group": "ING",
+    "definitions": [
+      {
+        "function": "cues",
+        "line": 20,
+        "end_line": 21
+      },
+      {
+        "function": "Memory.__init__",
+        "line": 25,
+        "end_line": 37
+      },
+      {
+        "function": "Memory.records",
+        "line": 39,
+        "end_line": 71
+      },
+      {
+        "function": "Memory.prepare",
+        "line": 73,
+        "end_line": 75
+      },
+      {
+        "function": "Memory.inference_get",
+        "line": 77,
+        "end_line": 84
+      },
+      {
+        "function": "Memory.inference_put",
+        "line": 86,
+        "end_line": 91
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+    "sha256": "a4f441c57854712af81045ba743bd55158835431a43d4fe5bb524a2fe3536d01",
+    "group": "ING",
+    "definitions": [
+      {
+        "function": "setup_models",
+        "line": 13,
+        "end_line": 23
+      },
+      {
+        "function": "Models.__init__",
+        "line": 27,
+        "end_line": 33
+      },
+      {
+        "function": "Models.key",
+        "line": 36,
+        "end_line": 38
+      },
+      {
+        "function": "Models.tokenizer",
+        "line": 41,
+        "end_line": 46
+      },
+      {
+        "function": "Models._load",
+        "line": 48,
+        "end_line": 59
+      },
+      {
+        "function": "Models._forward",
+        "line": 61,
+        "end_line": 76
+      },
+      {
+        "function": "Models.embed",
+        "line": 78,
+        "end_line": 98
+      },
+      {
+        "function": "Models.rerank",
+        "line": 100,
+        "end_line": 123
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/reactor.py",
+    "sha256": "83ae6d039367b4fb003b92504c57df7359503d9cb634599af0bb654e55b009e0",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "credentials",
+        "line": 20,
+        "end_line": 26
+      },
+      {
+        "function": "agent_lock",
+        "line": 30,
+        "end_line": 41
+      },
+      {
+        "function": "Reactor.__init__",
+        "line": 45,
+        "end_line": 47
+      },
+      {
+        "function": "Reactor.call",
+        "line": 49,
+        "end_line": 58
+      },
+      {
+        "function": "Reactor.lock",
+        "line": 60,
+        "end_line": 61
+      },
+      {
+        "function": "result_path",
+        "line": 64,
+        "end_line": 65
+      },
+      {
+        "function": "checked_result",
+        "line": 68,
+        "end_line": 83
+      },
+      {
+        "function": "citation_repair_question",
+        "line": 86,
+        "end_line": 89
+      },
+      {
+        "function": "_transmit",
+        "line": 92,
+        "end_line": 112
+      },
+      {
+        "function": "run_questions",
+        "line": 115,
+        "end_line": 184
+      },
+      {
+        "function": "export_predictions",
+        "line": 187,
+        "end_line": 216
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/report_entry_ui.py",
+    "sha256": "d1d05c725b1d3c350de2e18a2f4f60c8688591b1cb921da03d89146a862e7813",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "render_report_entry",
+        "line": 12,
+        "end_line": 91
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+    "sha256": "535c750f4893af3bbf39efdb8801ac6eb37be53e4a49feef51699e849de45746",
+    "group": "RET",
+    "definitions": [
+      {
+        "function": "terms",
+        "line": 20,
+        "end_line": 23
+      },
+      {
+        "function": "fuse",
+        "line": 26,
+        "end_line": 31
+      },
+      {
+        "function": "distinct",
+        "line": 34,
+        "end_line": 49
+      },
+      {
+        "function": "expand",
+        "line": 52,
+        "end_line": 63
+      },
+      {
+        "function": "reactor_question",
+        "line": 66,
+        "end_line": 72
+      },
+      {
+        "function": "message_size",
+        "line": 75,
+        "end_line": 77
+      },
+      {
+        "function": "pack",
+        "line": 80,
+        "end_line": 87
+      },
+      {
+        "function": "Retriever.__init__",
+        "line": 91,
+        "end_line": 96
+      },
+      {
+        "function": "Retriever.retrieve",
+        "line": 98,
+        "end_line": 242
+      },
+      {
+        "function": "Retriever.retrieve.query_vector",
+        "line": 128,
+        "end_line": 137
+      },
+      {
+        "function": "Retriever.retrieve.search",
+        "line": 139,
+        "end_line": 159
+      },
+      {
+        "function": "Retriever.retrieve.rerank",
+        "line": 166,
+        "end_line": 188
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+    "sha256": "1757d31fd448625adc08c6a684f2e785d54875d0470c3a89f6590a2c726cd4f4",
+    "group": "ING",
+    "definitions": [
+      {
+        "function": "iso_date",
+        "line": 12,
+        "end_line": 18
+      },
+      {
+        "function": "dataset_files",
+        "line": 21,
+        "end_line": 41
+      },
+      {
+        "function": "Store.__init__",
+        "line": 45,
+        "end_line": 71
+      },
+      {
+        "function": "Store.close",
+        "line": 73,
+        "end_line": 74
+      },
+      {
+        "function": "Store.questions",
+        "line": 76,
+        "end_line": 84
+      },
+      {
+        "function": "Store.sessions",
+        "line": 86,
+        "end_line": 89
+      },
+      {
+        "function": "Store.stats",
+        "line": 91,
+        "end_line": 93
+      },
+      {
+        "function": "Store.valid_sessions",
+        "line": 95,
+        "end_line": 97
+      },
+      {
+        "function": "Store.ingest",
+        "line": 99,
+        "end_line": 157
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/vendor/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "group": "RUN",
+    "definitions": []
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/vendor/reactor_client.py",
+    "sha256": "99cd636b269736bfb0e7bcf0d1f1fbe7b47613753a1f9cc342aa3d0912d8a9a0",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "environment_problem",
+        "line": 108,
+        "end_line": 118
+      },
+      {
+        "function": "NoAnswer.__init__",
+        "line": 125,
+        "end_line": 128
+      },
+      {
+        "function": "Refused.__init__",
+        "line": 142,
+        "end_line": 150
+      },
+      {
+        "function": "_base",
+        "line": 153,
+        "end_line": 161
+      },
+      {
+        "function": "chat_url",
+        "line": 164,
+        "end_line": 166
+      },
+      {
+        "function": "parse_question_date",
+        "line": 169,
+        "end_line": 184
+      },
+      {
+        "function": "load_evidence",
+        "line": 187,
+        "end_line": 215
+      },
+      {
+        "function": "build_message",
+        "line": 218,
+        "end_line": 246
+      },
+      {
+        "function": "final_answers",
+        "line": 249,
+        "end_line": 258
+      },
+      {
+        "function": "citations",
+        "line": 261,
+        "end_line": 268
+      },
+      {
+        "function": "ask",
+        "line": 271,
+        "end_line": 333
+      },
+      {
+        "function": "ask_retrying",
+        "line": 336,
+        "end_line": 359
+      },
+      {
+        "function": "new_history",
+        "line": 362,
+        "end_line": 375
+      },
+      {
+        "function": "_read",
+        "line": 378,
+        "end_line": 392
+      },
+      {
+        "function": "_timeout",
+        "line": 395,
+        "end_line": 405
+      },
+      {
+        "function": "_emit",
+        "line": 408,
+        "end_line": 412
+      },
+      {
+        "function": "main",
+        "line": 415,
+        "end_line": 488
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/vendor/score.py",
+    "sha256": "d5081b7a3412c768d202b0ca693888d3135678c92b55a6321a24691d3e320297",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "read_jsonl",
+        "line": 13,
+        "end_line": 18
+      },
+      {
+        "function": "write_jsonl",
+        "line": 21,
+        "end_line": 27
+      },
+      {
+        "function": "validate",
+        "line": 44,
+        "end_line": 62
+      },
+      {
+        "function": "normalize",
+        "line": 65,
+        "end_line": 75
+      },
+      {
+        "function": "aliases",
+        "line": 78,
+        "end_line": 84
+      },
+      {
+        "function": "answer_matched",
+        "line": 87,
+        "end_line": 91
+      },
+      {
+        "function": "evidence_f1",
+        "line": 94,
+        "end_line": 101
+      },
+      {
+        "function": "score_question",
+        "line": 104,
+        "end_line": 116
+      },
+      {
+        "function": "summarize",
+        "line": 119,
+        "end_line": 140
+      },
+      {
+        "function": "fmt",
+        "line": 146,
+        "end_line": 148
+      },
+      {
+        "function": "main",
+        "line": 151,
+        "end_line": 175
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/app.py",
+    "sha256": "6240474fb750a4c3a1ed0322a9aaabf935832f55a6e96d33209b9453b80d3ebc",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "models",
+        "line": 29,
+        "end_line": 30
+      },
+      {
+        "function": "save_report",
+        "line": 35,
+        "end_line": 45
+      },
+      {
+        "function": "open_report",
+        "line": 48,
+        "end_line": 52
+      },
+      {
+        "function": "navigate",
+        "line": 55,
+        "end_line": 56
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/benchmark_budgets.py",
+    "sha256": "cc3fdab45375089618e4eb49cb23c275528c609674f9f4a85859551f76669144",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "main",
+        "line": 15,
+        "end_line": 65
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/live_run.py",
+    "sha256": "f9d49b243ad2d939a0930f9eac8bcd3f3a34064ca2831b1de7f12b37634c6e19",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "main",
+        "line": 15,
+        "end_line": 74
+      },
+      {
+        "function": "main.run",
+        "line": 30,
+        "end_line": 44
+      }
+    ]
+  },
+  {
+    "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/prepare.py",
+    "sha256": "55fae2fad1102e537977bb4a2dcceb6387439bc1fc9e2ffa07c8260942406d4a",
+    "group": "RUN",
+    "definitions": [
+      {
+        "function": "main",
+        "line": 15,
+        "end_line": 61
+      }
+    ]
+  }
+]

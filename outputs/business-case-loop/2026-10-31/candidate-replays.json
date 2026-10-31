@@ -1,0 +1,145 @@
+{
+  "synthetic": true,
+  "status": "Reviewable experiment inputs only; not executed tests or measured results",
+  "purpose": "Compare current assisted report flow, stateless reporting, and simple rules using identical evidence. Map roles explicitly or adapt schema; do not silently flatten authority.",
+  "cases": [
+    {
+      "id": "scope_change",
+      "title": "Project scope-change triage",
+      "adaptation_gaps": [
+        "Client/agency/approver identity and authority; current model only Customer/Seller",
+        "Explicit approved baseline and project identity",
+        "Scope effects are interpretation, not contractual findings"
+      ],
+      "events": [
+        {
+          "sequence": 1,
+          "source_actor": "Project approver",
+          "text": "Approved scope is a single-language public site.",
+          "expected_review_state_or_action": "Record approved baseline with source; no change alert."
+        },
+        {
+          "sequence": 2,
+          "source_actor": "Internal team member",
+          "text": "We could add another language someday.",
+          "expected_review_state_or_action": "Hypothetical internal suggestion; do not change approved baseline or alert client."
+        },
+        {
+          "sequence": 3,
+          "source_actor": "Client requester",
+          "text": "Please add a second language for launch.",
+          "expected_review_state_or_action": "Flag proposed change against baseline; ask approver about scope/schedule; do not mark accepted."
+        },
+        {
+          "sequence": 4,
+          "source_actor": "Client requester",
+          "text": "Thanks, I received your message.",
+          "expected_review_state_or_action": "Acknowledgment does not approve new scope; state unchanged."
+        },
+        {
+          "sequence": 5,
+          "source_actor": "Project approver",
+          "text": "I approve adding the second language. We have not agreed a delivery-date change.",
+          "expected_review_state_or_action": "Record explicit approval of requirement; delivery impact remains unknown; do not infer price or schedule approval."
+        }
+      ],
+      "counterexamples": [
+        "Internal suggestion is not client commitment",
+        "Acknowledgment is not approval",
+        "Requirement approval does not authorize price/schedule changes"
+      ]
+    },
+    {
+      "id": "support_handoff",
+      "title": "Unresolved support-case handoff",
+      "adaptation_gaps": [
+        "Ticket identity and internal/customer/agent roles",
+        "Attempted versus suggested action state",
+        "Connector absent; manually pasted case only"
+      ],
+      "events": [
+        {
+          "sequence": 1,
+          "source_actor": "Customer",
+          "text": "The export stops halfway through.",
+          "expected_review_state_or_action": "Record reported symptom; cause unknown."
+        },
+        {
+          "sequence": 2,
+          "source_actor": "Support agent",
+          "text": "Please try exporting again after clearing the cache.",
+          "expected_review_state_or_action": "Record suggested action only; do not mark tried or fixed."
+        },
+        {
+          "sequence": 3,
+          "source_actor": "Customer",
+          "text": "I cleared the cache and retried. It worked once.",
+          "expected_review_state_or_action": "Record attempted action and one successful result; durable resolution unproven."
+        },
+        {
+          "sequence": 4,
+          "source_actor": "Customer",
+          "text": "This morning it failed again halfway through.",
+          "expected_review_state_or_action": "Record recurrence; previous apparent fix no longer establishes current resolution; prepare cited handoff."
+        },
+        {
+          "sequence": 5,
+          "source_actor": "Support agent",
+          "text": "The account contact email has been updated.",
+          "expected_review_state_or_action": "Administrative update; no evidence of symptom resolution; avoid redundant diagnostic alert."
+        }
+      ],
+      "counterexamples": [
+        "Advice is not an attempted fix",
+        "One success is not durable resolution",
+        "Administrative change should not alter technical state"
+      ]
+    },
+    {
+      "id": "decision_invalidation",
+      "title": "Engineering decision-assumption review",
+      "adaptation_gaps": [
+        "Explicit decision-to-assumption dependency links",
+        "Decision owner/authority and project identity",
+        "No implemented graph or automatic invalidation propagation"
+      ],
+      "events": [
+        {
+          "sequence": 1,
+          "source_actor": "Decision owner",
+          "text": "Choose service A because this project requires deployment only in region X.",
+          "expected_review_state_or_action": "Record decision and stated assumption; not all reasons are necessarily captured."
+        },
+        {
+          "sequence": 2,
+          "source_actor": "Engineer",
+          "text": "Another project may need region Y next year.",
+          "expected_review_state_or_action": "Different project and hypothetical need; do not invalidate this decision."
+        },
+        {
+          "sequence": 3,
+          "source_actor": "Project approver",
+          "text": "This project now requires deployment in both regions X and Y.",
+          "expected_review_state_or_action": "Mark original assumption contradicted; ask owner to review decision, not automatically reverse it."
+        },
+        {
+          "sequence": 4,
+          "source_actor": "Engineer",
+          "text": "Service A might support region Y, but I have not verified it.",
+          "expected_review_state_or_action": "Compatibility unknown; keep review pending; no unsupported failure claim."
+        },
+        {
+          "sequence": 5,
+          "source_actor": "Decision owner",
+          "text": "I reviewed the current service documentation and approve keeping service A. The supporting document is not attached.",
+          "expected_review_state_or_action": "Record owner decision to retain A; report compatibility as owner assertion with missing underlying evidence, not independently verified fact."
+        }
+      ],
+      "counterexamples": [
+        "Unrelated project does not invalidate decision",
+        "Changed assumption does not prove chosen solution fails",
+        "Owner statement does not supply independently verified technical evidence"
+      ]
+    }
+  ]
+}

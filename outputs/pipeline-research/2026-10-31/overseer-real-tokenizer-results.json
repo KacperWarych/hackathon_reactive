@@ -1,0 +1,53 @@
+{
+  "verification": "Independent rerun with real cached Qwen tokenizer; no weights loaded or network access",
+  "tokenizer_revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+  "results": {
+    "session_metric_wrong_passage": {
+      "recall_at_20": 1.0,
+      "all_required_at_20": true,
+      "packed_recall": 1.0,
+      "packed_all_required": true,
+      "packed_precision": 1.0
+    },
+    "unrelated_confirmation_stops_update_search": {
+      "question": "What is the current camera integration status?",
+      "rows": [
+        {
+          "text": "user: Camera integration was approved for our office printer.",
+          "date": "2023-05-01"
+        },
+        {
+          "text": "user: Our current camera integration status is blocked by security.",
+          "date": "2023-05-20"
+        }
+      ],
+      "expansion_reason": null
+    },
+    "paraphrase_lost_during_packing": {
+      "input_contains_answer": true,
+      "memory_unit_count": 3,
+      "generated_option_count": 2,
+      "packed_contains_answer": false,
+      "packed_metrics": {
+        "recall_at_20": 1.0,
+        "all_required_at_20": true,
+        "packed_recall": 1.0,
+        "packed_all_required": true,
+        "packed_precision": 1.0
+      }
+    },
+    "target_clipped_at_small_excerpt_budget": {
+      "excerpt_tokens": 60,
+      "option_count": 1,
+      "target_retained": false
+    },
+    "display_validation_limits": {
+      "negation_outside_quote": {
+        "accepted": true
+      },
+      "different_fact": {
+        "accepted": true
+      }
+    }
+  }
+}

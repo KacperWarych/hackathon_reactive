@@ -1,0 +1,296 @@
+{
+  "researcher_model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "function_count": 38,
+  "report": "ing-report.md",
+  "evidence": [
+    "ing-probes.py",
+    "ing-probe-results.json",
+    "ing-real-tokenizer-probe.py",
+    "ing-real-tokenizer-results.json",
+    "ing20-metadata-probe.py",
+    "ing20-metadata-results.json"
+  ],
+  "findings": [
+    {
+      "id": "ING-01",
+      "priority": "P2",
+      "classification": "confirmed_bug_conditional_reimport",
+      "title": "Retained questions lose corresponding replacement gold",
+      "code": [
+        "store.py:107-113",
+        "store.py:127-131"
+      ],
+      "probe": "ING-01",
+      "fix": "Define merge/replacement modes and reconcile questions/gold consistently.",
+      "validation": "Shrinking/expanding/filtered/public-only reimports preserve declared annotation invariants.",
+      "limit": "Changed-source imports; no blanket assumption omitted histories should delete."
+    },
+    {
+      "id": "ING-02",
+      "priority": "P2",
+      "classification": "confirmed_bug_conditional_roundtrip",
+      "title": "Manual exported history collides on reimport",
+      "code": [
+        "entries.py:48-53",
+        "store.py:133-150"
+      ],
+      "probe": "ING-02",
+      "fix": "Reconcile preserved manual IDs idempotently; reject different-content conflicts explicitly.",
+      "validation": "Export to supported dataset directory, reimport twice, then original reimport.",
+      "limit": "Probe includes required questions file; export fragment alone is not the tested input."
+    },
+    {
+      "id": "ING-03",
+      "priority": "P2",
+      "classification": "confirmed_input_validation_bug",
+      "title": "Missing turn ID imports then crashes indexing",
+      "code": [
+        "store.py:119-150",
+        "chunks.py:12"
+      ],
+      "probe": "ING-03",
+      "fix": "Validate schemas, unique typed IDs, and history linkage or explicitly generate stable IDs.",
+      "validation": "Missing/duplicate/empty IDs and orphan questions fail consistently before index use.",
+      "limit": "Missing-ID crash measured; duplicate-ID and orphan-question downstream errors not measured."
+    },
+    {
+      "id": "ING-04",
+      "priority": "P1",
+      "classification": "confirmed_failure_integrity_bug",
+      "title": "Failed import leaves pending question insert later committed implicitly",
+      "code": [
+        "store.py:127-153",
+        "memory.py:30-37"
+      ],
+      "probe": "ING-04",
+      "fix": "Own question-file transaction/savepoint and rollback on failure; initialize schema outside operational transactions.",
+      "validation": "After late malformed question, Memory initialization or unrelated operations must not publish failed inserts.",
+      "limit": "Per-history checkpoints may remain intentional; delayed implicit commit is the defect."
+    },
+    {
+      "id": "ING-05",
+      "priority": "P3",
+      "classification": "design_limitation",
+      "title": "Unknown colon labels are prior-speaker continuation text",
+      "code": [
+        "entries.py:21-27"
+      ],
+      "probe": "ING-05",
+      "fix": "Expose likely unknown labels for explicit correction/acceptance; document multiline grammar.",
+      "validation": "Unknown roles, known aliases, quoted transcripts and ordinary colon notes remain distinguishable.",
+      "limit": "Not every colon line is a speaker; current behavior can be intentional."
+    },
+    {
+      "id": "ING-06",
+      "priority": "P3",
+      "classification": "configuration_validation_gap",
+      "title": "Invalid direct Config values exceed chunk cap or fail late",
+      "code": [
+        "config.py:28-47",
+        "chunks.py:20-24",
+        "index.py:59"
+      ],
+      "probe": "ING-06",
+      "fix": "Validate configuration relationships and clamp fallback chunk end.",
+      "validation": "Invalid values reject at construction; default and boundary-valid configurations obey real-tokenizer caps.",
+      "limit": "Not triggered by application defaults; UI exposure not established."
+    },
+    {
+      "id": "ING-07",
+      "priority": "P3",
+      "classification": "conditional_concurrency_limitation",
+      "title": "Atomic JSON writers share one temporary filename",
+      "code": [
+        "config.py:18-25"
+      ],
+      "probe": "ING-07",
+      "fix": "Use invocation-unique same-directory temp files plus caller locks for read-modify-write.",
+      "validation": "Overlapping writers do not remove one another's temp files or raise replace FileNotFoundError.",
+      "limit": "Unprotected concurrent production caller to same path not established by ING."
+    },
+    {
+      "id": "ING-08",
+      "priority": "P2",
+      "classification": "confirmed_concurrent_library_bug",
+      "title": "Two index builds collide inserting ready marker",
+      "code": [
+        "index.py:41-53"
+      ],
+      "probe": "ING-08",
+      "fix": "Serialize per-content builds or recheck readiness within idempotent transaction publication.",
+      "validation": "Separate-connection/process synchronized lexical/dense builds complete with one intact index.",
+      "limit": "Barrier establishes possible race, not observed production frequency."
+    },
+    {
+      "id": "ING-09",
+      "priority": "P3",
+      "classification": "conditional_runtime_consistency_gap",
+      "title": "Config identity rereads changed lock while Models keeps old snapshot",
+      "code": [
+        "models.py:30-38",
+        "config.py:50-58",
+        "index.py:17"
+      ],
+      "probe": "ING-09",
+      "fix": "Use one immutable revision snapshot across runtime or reject changed lock until restart.",
+      "validation": "Temporary lock mutation preserves one consistent identity or errors clearly.",
+      "limit": "Requires live lock change; stable-lock documented workflows avoid it."
+    },
+    {
+      "id": "ING-10",
+      "priority": "P3",
+      "classification": "mock_demonstrated_recovery_limitation",
+      "title": "MPS allocation/load exceptions bypass forward-only CPU fallback",
+      "code": [
+        "models.py:48-76",
+        "models.py:83-84",
+        "models.py:105-106"
+      ],
+      "probe": "ING-10",
+      "fix": "Centralize recoverable load/forward retry policy or narrow documented promise.",
+      "validation": "Mock load/forward failure retries CPU once with clean state; optional real hardware check separately.",
+      "limit": "No actual device failure or weights used."
+    },
+    {
+      "id": "ING-11",
+      "priority": "P3",
+      "classification": "defensive_hardening_hypothesis",
+      "title": "Memory records expose mutable cached objects",
+      "code": [
+        "memory.py:42-45",
+        "memory.py:68-71"
+      ],
+      "probe": "ING-11",
+      "fix": "Return immutable records/copies or explicitly document read-only ownership.",
+      "validation": "External mutation cannot silently change later records; benchmark copy cost.",
+      "limit": "Existing inspected callers do not mutate records."
+    },
+    {
+      "id": "ING-12",
+      "priority": "P3",
+      "classification": "selection_validation_gap",
+      "title": "Unknown explicit history selection silently builds nothing",
+      "code": [
+        "index.py:34-36"
+      ],
+      "probe": "ING-12",
+      "fix": "Report missing requested IDs unless allow-missing is explicit.",
+      "validation": "Mixed valid/missing IDs, empty selection and missing split have deliberate behavior.",
+      "limit": "Zero-work selection may sometimes be intentional."
+    },
+    {
+      "id": "ING-13",
+      "priority": "P2",
+      "classification": "confirmed_performance_mechanism_unmeasured_impact",
+      "title": "Lexical candidates load unused embedding BLOBs",
+      "code": [
+        "index.py:97-110"
+      ],
+      "probe": "ING-13",
+      "fix": "Remove embedding join/vector column from lexical query path.",
+      "validation": "Equivalent lexical results; controlled bytes/RSS/cold-warm timings.",
+      "limit": "No production latency/RSS benefit measured."
+    },
+    {
+      "id": "ING-14",
+      "priority": "P3",
+      "classification": "defense_in_depth_hypothesis",
+      "title": "Index trusts custom or stored vector validity",
+      "code": [
+        "index.py:72-78",
+        "index.py:103-114",
+        "models.py:95-97"
+      ],
+      "probe": "ING-14",
+      "fix": "Validate custom adapter/storage dimension and finite contracts when required.",
+      "validation": "Malformed shapes/NaNs/truncated BLOBs fail before ranking.",
+      "limit": "Custom fake bypasses actual Models.embed finite guard; no corrupt production vectors observed."
+    },
+    {
+      "id": "ING-15",
+      "priority": "P3",
+      "classification": "disclosed_lexical_hint_limitation",
+      "title": "Cue regexes do not model negation or revocation",
+      "code": [
+        "memory.py:10-21"
+      ],
+      "probe": "ING-15",
+      "fix": "Keep hints separate from assertion/state proof; evaluate downstream gating in RET.",
+      "validation": "Contrastive negation/conditional/revocation/entity examples scored on downstream consequences.",
+      "limit": "Lexical hints explicitly are not verified state; not standalone semantic bug."
+    },
+    {
+      "id": "ING-16",
+      "priority": "P2",
+      "classification": "confirmed_real_tokenizer_algorithm_bug",
+      "title": "Period-space sentence ends fail exact offset boundary matching",
+      "code": [
+        "memory.py:54-64"
+      ],
+      "probe": "ing-real-tokenizer-results.json:cases.period_space",
+      "fix": "Align punctuation ends to token ends while preserving source spans; bump memory scheme.",
+      "validation": "Real-tokenizer punctuation/newline/Unicode boundary tests and retention checks.",
+      "limit": "Six-sentence synthetic real-tokenizer example; downstream accuracy prevalence unmeasured."
+    },
+    {
+      "id": "ING-17",
+      "priority": "P3",
+      "classification": "input_manifest_design_limitation",
+      "title": "Duplicate archive basenames overwrite per-history content; empty archive succeeds",
+      "code": [
+        "store.py:35-41",
+        "store.py:115-150"
+      ],
+      "probe": "ING-17",
+      "fix": "Validate recognized file identity and define explicit partial/merge semantics; reject ambiguous duplicates.",
+      "validation": "Wrapped/partial/empty/duplicate/multi-split archives behave explicitly.",
+      "limit": "Histories-only partial archives intentionally used by existing tests; do not require both files universally."
+    },
+    {
+      "id": "ING-18",
+      "priority": "P3",
+      "classification": "confirmed_redundant_work_mechanism",
+      "title": "Same-batch identical fresh texts are embedded repeatedly",
+      "code": [
+        "index.py:63-80"
+      ],
+      "probe": "ING-18",
+      "fix": "Encode unique text hashes per fresh batch then fan out to distinct chunk IDs.",
+      "validation": "Repeated/unique chunks and later append reuse preserve output equality and reduce submitted text count.",
+      "limit": "Six submitted texts versus three unique measured with fake vectors; real inference speed unmeasured."
+    },
+    {
+      "id": "ING-19",
+      "priority": "P3",
+      "classification": "cache_lifecycle_design_limitation",
+      "title": "Replaced content revisions remain stored without retention accounting",
+      "code": [
+        "store.py:134-148",
+        "index.py:48-80",
+        "memory.py:65-67"
+      ],
+      "probe": "ING-19",
+      "fix": "Add reference-aware dry-run retention accounting/garbage collection policy if storage warrants it.",
+      "validation": "Shared content, saved provenance, cache references and interrupted cleanup remain intact.",
+      "limit": "Retention may be intentional immutable audit/cache; no disk exhaustion or leak claim."
+    },
+    {
+      "id": "ING-20",
+      "priority": "P2",
+      "classification": "source_contract_design_limitation",
+      "title": "Public customer/call/product identity metadata discarded during ingestion",
+      "code": [
+        "store.py:53-55",
+        "store.py:86-89",
+        "store.py:137-150",
+        "salesgen_dataset_fail/README.md:23-24",
+        "salesgen_dataset_fail/README.md:68-70"
+      ],
+      "probe": "ing20-metadata-results.json",
+      "fix": "Version schema/import and preserve validated public session metadata separately from evaluation annotations; bind to split/history/session and expose IDs to aggregation/export.",
+      "validation": "Round-trip176 calls/four fields; group147 customers including29 multi-call identities; latest eligible call/as-of/product-scope checks; verify no gold outcome/reason labels ingested.",
+      "limit": "Public-only probe; identity inference from text not logically impossible but not equivalent to supplied IDs; call gold remains evaluation-only; complements RET-05."
+    }
+  ]
+}

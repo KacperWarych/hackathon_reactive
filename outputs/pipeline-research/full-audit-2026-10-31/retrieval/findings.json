@@ -1,0 +1,232 @@
+{
+  "function_count": 35,
+  "findings": [
+    {
+      "id": "RET-01",
+      "severity": "High",
+      "classification": "Confirmed bug, real tokenizer",
+      "title": "Prior-turn context jumps over a long current turn and clips the selected late answer at the default 320-token cap",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:58",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:61",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:70"
+      ],
+      "details_fix_and_validation": "**Code:** [evidence.py:58](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:58>), [evidence.py:61](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:61>), [evidence.py:70](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:70>).\n\nThe selected unit is the short final unit of a 400-word weather monologue followed by “The camera is approved.” It wins lexical matching for “Is the camera approved?” A short assistant message precedes that long user turn. Because the final unit is short, the preceding-turn rule moves `lo` to the assistant turn. Slicing `full[lo:hi]` then includes all 400 earlier words of the *current* turn, not only the selected unit plus bounded prior context. Head truncation at 320 tokens removes the selected camera assertion. The other proposed option does not recover it.\n\nBoth whitespace and real Qwen probes report three user units, a selected tail of 4/5 tokens, no target in any default option, target retained with `context_tokens=0`, and target retained with `excerpt_tokens=1000`. The real-tokenizer untruncated first option is 416 tokens. This is a new default-configuration counterexample; the earlier research only proved truncation at a nondefault 60-token cap. The whole source fits a default chunk, so the probe does not depend on an oversized source chunk.\n\n**Fix:** assemble explicitly separated prior-context and selected-unit segments, rather than one contiguous slice across omitted units; allocate mandatory space to the selected unit first, and trim optional context around it. Preserve roles and discontiguous offsets. Do not fix solely by increasing the cap.\n\n**Regression:** late short third unit after a 400-token turn prefix, preceded by a different speaker; assert target retained under default caps, context bounded, offsets/roles correct. Repeat with real tokenizer and both with/without a short following turn.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-01"
+    },
+    {
+      "id": "RET-02",
+      "severity": "High",
+      "classification": "Confirmed design limit, known",
+      "title": "Two lexical unit options can discard an answer already inside the retrieved chunk",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:51"
+      ],
+      "details_fix_and_validation": "**Code:** [evidence.py:51](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:51>).\n\nThe eligible units of a correctly retrieved chunk are sorted by exact question-keyword overlap, then earlier offset, and only `eligible[:2]` survives. For “What is my current occupation?”, 400 weather words followed by “I became a lighthouse keeper” yield three units and two answer-free options in both tokenizers. This repeats the prior known finding and distinguishes it from RET-01: here the answer unit is never proposed; there it is proposed then clipped.\n\n**Fix/test:** compare bounded broader unit admission and optional query–unit scoring with current selection on fixed retrieved chunks and fixed final evidence budgets. Add a paraphrase/tie regression with the answer in unit three. Measure assertion retention and added scoring work before claiming quality improvement.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-02"
+    },
+    {
+      "id": "RET-03",
+      "severity": "High",
+      "classification": "Confirmed bug",
+      "title": "Text deduplication across dates deletes the latest occurrence and its date",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:89",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:108"
+      ],
+      "details_fix_and_validation": "**Code:** [evidence.py:89](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:89>), [evidence.py:108](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:108>).\n\nFor two distinct sessions on May 1 and May 25, each saying “I purchased the camera,” the real `Retriever(...).retrieve(..., 'rerank')` with deterministic test models returns both candidates but packs only May 1 for “When was my latest camera purchase?” Identical text is discarded across sessions unless the question matches the aggregation regex. The later-update utility cannot rescue a candidate once `redundant()` rejects its text. Source dates represent distinct events and are the requested answer here.\n\n**Fix:** preserve event/source/date identity during deduplication, particularly for temporal/event queries; if identical support is intentionally collapsed, retain all dates/source IDs and choose the appropriate latest occurrence. Do not blindly retain only the first text.\n\n**Regression:** identical event wording across two dates, original candidate order older first, temporal query; require latest date/source retained. Include non-temporal factual repeats and count queries to check budget tradeoffs.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-03"
+    },
+    {
+      "id": "RET-04",
+      "severity": "Medium",
+      "classification": "Confirmed loss mechanism, real tokenizer",
+      "title": "Overlap deduplication discards a short final chunk containing a unique fact",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:34",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:163"
+      ],
+      "details_fix_and_validation": "**Code:** [retrieval.py:34](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:34>), called before reranking at [retrieval.py:163](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:163>).\n\nUsing default chunk settings, a first user turn with 448 weather words followed by a short second user turn “camera is approved” makes two Qwen chunks of 451 and 91 tokens. The first ends at the first-turn boundary; the short final chunk contains 80 overlapping tokens and the unique assertion. `distinct([0, 1], rows)` keeps only the first because overlap exceeds 65% of the smaller interval. The only chunk containing “camera is approved” is deleted. The whitespace case also reproduces (449/86 tokens).\n\nThis fixes the candidate input order to isolate deduplication; it does not show how often a learned retriever orders the chunks this way, nor claim that every overlap removal loses information. The first attempted one-turn fixture did **not** reproduce because boundary snapping kept the full source in one chunk; it was rejected and replaced by the two-turn fixture.\n\n**Fix:** remove only fully covered or content-equivalent intervals; otherwise merge provenance-aware spans or retain novel tails. If relevance must choose between partially overlapping chunks, compare after reranking and track unique supporting spans.\n\n**Regression:** default-generated two-turn boundary fixture; verify the unique final assertion remains after deduplication for both candidate orders, plus true-contained duplicate and cross-session cases.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-04"
+    },
+    {
+      "id": "RET-05",
+      "severity": "Medium",
+      "classification": "Confirmed design limit, known",
+      "title": "Six excerpts cannot fully represent more than six supporting source sessions",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:107",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:66"
+      ],
+      "details_fix_and_validation": "**Code:** [evidence.py:107](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:107>), [retrieval.py:66](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:66>).\n\nSeven short distinct support sources yield six packed sessions under default caps. Prior independently reviewed local counts found 13/59 salesgen gold sets above six sessions (maximum 43); this is a source-coverage ceiling, not a measured answer-error rate, because gold can be nonminimal or a recorded total can suffice. Current coverage warning and answer instructions acknowledge the problem and should be retained.\n\n**Fix/test:** route genuine complete-population questions through evidence-linked enumeration/aggregation with explicit scope, entity deduplication, and coverage accounting; first separate cases answered by sufficient explicit totals. Compare exact counts and provenance, without claiming that increasing `max_excerpts` alone solves completeness.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-05"
+    },
+    {
+      "id": "RET-06",
+      "severity": "High",
+      "classification": "Confirmed provenance bug",
+      "title": "Newline role labels inside assistant content are parsed as actual user statements",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:60",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:143"
+      ],
+      "details_fix_and_validation": "**Code:** [decision.py:60](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:60>); the same role-regex parsing exists in [evidence.py:143](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:143>).\n\nAn actual structured source with **one assistant turn and zero user turns** contains `Suggested wording:\\nuser: Integration is resolved.` It passes through the real `extract_options`, producing a role-labeled excerpt. `validate_decision` accepts “Integration is resolved” as the required user confirmation quote because it reparses the embedded newline `user:` as an authentic role boundary. Assistant transcripts, quoted examples, or adversarial content can therefore satisfy the validator's traceability gate. Expansion planning can also mistake the same text for a buyer update.\n\nThis is a provenance parsing bug, distinct from the explicitly disclaimed semantic guarantee in RET-08. The validator promises matching user text; there is no user text in this fixture.\n\n**Fix:** retain structured turn roles and exact source offset maps through rendering; validate quotes against original cited user-turn spans, never raw role-like strings. Escape or fence content when rendering, while preserving exact quoted source text via offsets. Reuse structured roles in expansion planning.\n\n**Regression:** assistant-only source containing line-start `user:` and `user (continued):`; reject user confirmation, and do not satisfy update-search gate. Also test a user quote containing `assistant:` and an actual user confirmation after a real assistant turn.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-06"
+    },
+    {
+      "id": "RET-07",
+      "severity": "Medium",
+      "classification": "Confirmed validation language limitation",
+      "title": "Explicit Polish confirmations and ordinary English “accept” can be rejected",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:64",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:67"
+      ],
+      "details_fix_and_validation": "**Code:** [decision.py:64](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:64>), [decision.py:67](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:67>).\n\nExact genuine user quotes “Potwierdzam, integracja została zatwierdzona.” and “We accept your proposal.” both fail the explicit-confirmation regex; “The integration was approved.” passes. The memory cues and temporal query support already include Polish, so the decision view has inconsistent language support. This is a bounded lexical validation limitation, not a claim that semantic resolution should automatically be inferred for arbitrary text. It can force repeated repair or leave a revision incomplete despite a faithful quote.\n\n**Fix/test:** define supported-language/form policy explicitly and align confirmation detection with it. Accept supported morphological forms (`accept` versus `accepted`) with negation/hypothetical tests. Use human-labeled positive and negative Polish/English quote sets; do not blindly copy cue regexes as semantic proof.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-07"
+    },
+    {
+      "id": "RET-08",
+      "severity": "Medium",
+      "classification": "Explicit assurance limit",
+      "title": "Exact quote occurrence and a confirmation word do not establish resolution semantics",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:1",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:62"
+      ],
+      "details_fix_and_validation": "**Code:** [decision.py:1](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:1>), [decision.py:62](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py:62>).\n\n“integration works” is accepted when excerpted from “It is not true that integration works.” Likewise, “Lunch has been paid” can support a structurally valid entry whose claimed resolution is “Integration resolved.” The quote may omit the surrounding negation or concern linkage. This repeats deferred prior diagnostics and is an **explicit assurance limit**, not a violation of a promised semantic verifier. `decision.py` and `INVESTIGATIONS.md` state the limitation.\n\n**Recommendation/test:** preserve the existing honest disclaimer; optionally expose structured concern/confirmation links, full-sentence quote boundaries, original speaker, entity, modality, and chronology for human inspection or an independently evaluated semantic check. Build span-level tests for negation outside quoted substrings, unrelated facts, missing earlier concerns, and genuine linked resolution; keep official session scoring unchanged.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-08"
+    },
+    {
+      "id": "RET-09",
+      "severity": "Low",
+      "classification": "Explicit heuristic limit",
+      "title": "Update-search gate checks lexical coverage and any user update, without same-fact linkage",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:130"
+      ],
+      "details_fix_and_validation": "**Code:** [evidence.py:130](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:130>).\n\nThe gate returns no expansion reason when the source set has a camera-integration approval “for our office printer” on one date and the current camera-integration security blocker on another. It unions query terms over chunks and checks that at least one relevant user block has update/confirmation cues; those checks do not link the update to the questioned fact or require a later completion for that blocker. The probe already contains the current blocker, so it does **not** prove a wrong answer or that expansion was needed. The function docstring correctly calls this a conservative hint rather than an answerability check.\n\n**Recommendation/test:** retain that characterization. If expansion should depend on unresolved fact coverage, use linked entity/fact/time diagnostics evaluated on labeled missing-update cases. Measure extra-search rate and retrieval gains; do not turn the current cue gate into a sufficiency certificate.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-09"
+    },
+    {
+      "id": "RET-10",
+      "severity": "Low",
+      "classification": "Library/scoring design limitation",
+      "title": "Scoped BM25 can have negative IDF and prefer fewer occurrences of an ubiquitous query term",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:114",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:145"
+      ],
+      "details_fix_and_validation": "**Code:** [retrieval.py:114](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:114>), [retrieval.py:145](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:145>).\n\n`BM25Okapi([terms('camera camera camera camera camera'), terms('camera lens')])` assigns `camera` IDF `-0.2011797`; query scores are approximately `-0.3602` and `-0.2492`, so the document with one occurrence ranks above the document with five. The package's epsilon floor is relative to an average IDF that can itself be negative. This is library/scoring behavior, not an application or library correctness bug, and repeated terms do not guarantee actual semantic relevance. It warrants awareness because the lexical corpus is a single time-filtered history, which may be small.\n\n**Recommendation/test:** record zero/negative IDF and tie rates on scoped histories; compare a nonnegative-IDF formulation or alternative lexical baseline using frozen relevance labels, especially small and ubiquitous-topic corpora. No superiority claim is established by this two-document probe.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-10"
+    },
+    {
+      "id": "RET-11",
+      "severity": "Medium",
+      "classification": "Confirmed audit-metadata bug",
+      "title": "Investigation trace counts sources as excerpts and retains removed excerpt IDs/offsets",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:234",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:242",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:234"
+      ],
+      "details_fix_and_validation": "**Code:** [investigations.py:234](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:234>), [investigations.py:242](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:242>), [retrieval.py:234](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:234>).\n\n`evidence` is grouped by session, but investigation postprocessing sets `excerpt_count=len(evidence)`. At default budgets, a real retrieval of two selected excerpts from one session changes from count 2 to count 1 despite removing no evidence; `selected_excerpts` still has two entries. In a separate 6,000-character configuration probe, investigation budgeting removes two of six source groups, yet trace `selected_excerpts` retains IDs/offsets from all six. The code moves `evidence_tokens` to `retrieved_evidence_tokens` on pruning, but does not similarly preserve/recompute selected excerpts. This can mislead assertion diagnostics and inspection of what was sent.\n\n**Fix:** distinguish selected excerpt count from rendered source count; maintain `retrieved_selected_excerpts` separately and recompute actual sent excerpt IDs/offsets/counts/tokens after budgeting. Budget/prune at an explicit excerpt representation before rendering sources.\n\n**Regression:** one session with two nonoverlapping selected excerpts and no pruning; multiple sessions with budget pruning; assert every sent offset belongs to sent source text and counts use their stated units.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-11"
+    },
+    {
+      "id": "RET-12",
+      "severity": "Medium",
+      "classification": "Confirmed provenance-metadata inconsistency",
+      "title": "Decision-only snapshot reuse stamps a new source revision onto old saved evidence",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:196",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:198",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:203"
+      ],
+      "details_fix_and_validation": "**Code:** [investigations.py:196](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:196>), [investigations.py:198](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:198>), [investigations.py:203](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:203>).\n\nAfter a source is edited at the same session ID/date, decision-only mode intentionally reuses the saved evidence. That behavior is explicitly documented and is **not itself a stale-retrieval bug**. However, `_revise` calculates a fresh `question.history_revision` from the edited corpus, copies the parent's old retrieval/trace/evidence, then replaces its question with the fresh metadata. The probe confirms saved old text retained, question fingerprint changed, and trace history revision unchanged. Old trace and new question fingerprints already use different constructions during normal operation; the specific defect here is stamping the new corpus identity onto intentionally old content, not merely comparing unlike hash strings.\n\n**Fix:** preserve the snapshot's corpus revision/content hashes for decision-only builds and record current-source revision separately, optionally with a source-changed indicator. Do not silently force fresh retrieval for a documented saved-snapshot operation. Bind evidence to immutable content hashes and source offsets, not only IDs/dates.\n\n**Regression:** edit a same-ID/date source, build saved decision view, require old snapshot revision plus an explicit current revision/staleness field; ordinary revise should use fresh evidence and its revision consistently.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-12"
+    },
+    {
+      "id": "RET-13",
+      "severity": "Low",
+      "classification": "Service API limitation; UI mitigates",
+      "title": "`recover=True` does not replay failed prompt/date by itself",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:157",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:161",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigation_ui.py:130"
+      ],
+      "details_fix_and_validation": "**Code:** [investigations.py:157](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:157>), [investigations.py:161](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py:161>), mitigation [investigation_ui.py:130](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigation_ui.py:130>).\n\nAfter a failed attempt with a supplier-focused follow-up and June 2 time boundary, `service.revise(last_success, recover=True)` recovers using the parent's original query and June 1 date; it does not reuse the failed prompt/date. It only restores the failed `decision_only` flag. The current UI mitigates this by prepopulating failed prompt/date and resubmitting them. Consequently this is a service API usability limitation, **not a confirmed current UI recovery bug**.\n\n**Recommendation/test:** either document caller responsibility explicitly, or use a dedicated retry-attempt operation that defaults to the failed request's prompt/date and accepts intentional edits separately. Regression should cover API-only retry plus UI-supplied overrides and failed decision-only mode.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-13"
+    },
+    {
+      "id": "RET-14",
+      "severity": "Medium",
+      "classification": "Confirmed bounded-admission limitation",
+      "title": "Expansion budget can admit only old initial candidates while excluding every newly discovered candidate",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:190",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:198"
+      ],
+      "details_fix_and_validation": "**Code:** [retrieval.py:190](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:190>), [retrieval.py:198](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:198>).\n\nA deterministic search-ranking fixture with default `retrieve_k=40`, `rerank_k=40`, and `expansion_k=12` creates 80 initial hybrid candidates. Expansion search finds 20 additional candidates. Merging the preserved initial reranked 40 with the fused union and taking the first 52 admits only old initial candidates; none of the 20 expansion-only candidates reaches final reranking/packing. Branch corroboration and fusion order consume the added 12 slots. Identical test documents mean cache reuse produces only 40 actual reranker document calls; the relevant observation is candidate admission, not 52 inference calls.\n\nThis is a confirmed bounded-admission limitation, not a claim that expansion is always useless or that RRF is broken. Favoring corroborated initial evidence can improve precision. The “genuinely new update-search candidates” comment does not describe expansion-only provenance: the admitted documents can be merely previously unreranked initial candidates.\n\n**Experiment:** compare explicit initial-unreranked versus expansion-only queues, possibly reserving a small expansion-only quota while retaining initial support. Measure missing-update recall and precision on frozen candidate labels with the same total reranking budget; a quota has a real precision tradeoff.\n\n**Regression:** the fixed 80-initial/20-new fixture should make branch provenance visible and enforce the selected admission policy, rather than assuming every new candidate must fit.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-14"
+    },
+    {
+      "id": "RET-15",
+      "severity": "Low",
+      "classification": "Confirmed timing semantics",
+      "title": "Search timing includes query-embedding timing; fields are not exclusive stage durations",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:128",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:139",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:158"
+      ],
+      "details_fix_and_validation": "**Code:** [retrieval.py:128](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:128>), [retrieval.py:139](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:139>), [retrieval.py:158](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:158>).\n\n`search_seconds` wraps `query_vector`, which also accumulates `query_embedding_seconds`. An intentionally delayed fake embed confirms the same ~40 ms is present in both values. This establishes nested timing semantics; no inspected consumer was shown to sum them, so it is not evidence that a reported end-to-end duration is wrong. Total `seconds` is wall time and remains separate.\n\n**Recommendation/test:** rename inclusive search time or collect exclusive lexical/dense-search and query-embedding fields. Test with controlled fake model delay; document inclusion/exclusion and avoid summing nested fields. The delay is a probe mechanism, not production latency measurement.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-15"
+    },
+    {
+      "id": "RET-16",
+      "severity": "Medium at scale",
+      "classification": "Structural performance opportunity",
+      "title": "One retrieved chunk still processes every turn in its source session",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:37",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:39",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:51",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:208"
+      ],
+      "details_fix_and_validation": "**Code:** [evidence.py:37](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:37>), [evidence.py:39](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:39>), [evidence.py:51](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py:51>); [retrieval.py:208](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:208>).\n\nFor one retrieved chunk covering one eligible turn in a 1,000-turn source, the real option builder calls `memory.records` 1,000 times, rebuilds the complete rendering/spans/units, then filters for the chunk. Original-turn JSON is fetched for every retrieved session in full. Cache hits avoid retokenizing persisted units, but do not remove session-wide JSON loading/rendering/record lookups. This is proven work amplification; no real latency, memory bottleneck, or speedup was measured.\n\n**Experiment/fix:** persist immutable session rendering plus turn/unit offsets keyed by content hash/tokenizer scheme, retrieve intersecting units via indexed spans, and expand only bounded adjacent context. Benchmark real long sessions with cold/warm caches and unchanged evidence before adopting the added index complexity.\n\n**Regression:** instrument records/turn materialization counts for a narrow chunk in a large session; keep correctness tests for offset, role, and context equivalence. Report runtime only after measured experiments.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-16"
+    },
+    {
+      "id": "RET-17",
+      "severity": "High",
+      "classification": "Confirmed interleaving bug",
+      "title": "Retrieval can rank one source revision and pack another under the original trace revision",
+      "source_references": [
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:105",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:112",
+        "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:208"
+      ],
+      "details_fix_and_validation": "**Code:** [retrieval.py:105](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:105>), [retrieval.py:112](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:112>), [retrieval.py:208](</Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py:208>).\n\nMetadata/candidate chunks are read before search/reranking. Original turns are fetched later by session ID, without binding their `content_hash` to the retrieved chunk's immutable content hash. A deterministic interleaving probe edits the same session during a fake reranker call from “The camera lens is approved” to “Radio purchase was rejected,” at the same date. Retrieval succeeds and packs the new radio text under candidate chunk IDs and history revision computed from the old camera source. The edited source was never reindexed. This simulates a source edit during model work; it uses no concurrent remote calls and no production writes.\n\nThe mechanism can occur with another ingestion/entry writer because investigation/agent locks do not establish a shared source snapshot. The single-connection callback proves the missing revision binding, not observed real-world race frequency. If an external caller already enforces source immutability for the entire operation, that caller avoids the condition; `Retriever` itself does not enforce it.\n\n**Fix:** pack from the immutable `contents` row associated with each retrieved chunk's content hash; snapshot eligible session metadata and bind IDs/dates/hashes at operation start. Alternatively detect source-revision change before return and retry/abort boundedly, without returning mixed provenance. Apply consistent snapshot semantics to investigation eligible-source fingerprints as well.\n\n**Regression:** mutate same-ID/date source during search/rerank, and remove/move a session at the same boundary; require either complete old snapshot, complete reindexed fresh snapshot, or a clear retryable source-change error. Never combine old chunk offsets/revision with newly fetched content.",
+      "evidence": "probe-results.json",
+      "report": "report.md#ret-17"
+    }
+  ]
+}

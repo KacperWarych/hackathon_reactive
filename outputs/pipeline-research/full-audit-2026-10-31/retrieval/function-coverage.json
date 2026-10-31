@@ -1,0 +1,290 @@
+{
+  "retrieval.py": [
+    {
+      "function": "terms",
+      "line": 20,
+      "end_line": 23,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "fuse",
+      "line": 26,
+      "end_line": 31,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "distinct",
+      "line": 34,
+      "end_line": 49,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "expand",
+      "line": 52,
+      "end_line": 63,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "reactor_question",
+      "line": 66,
+      "end_line": 72,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "message_size",
+      "line": 75,
+      "end_line": 77,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "pack",
+      "line": 80,
+      "end_line": 87,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Retriever.__init__",
+      "line": 91,
+      "end_line": 96,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Retriever.retrieve",
+      "line": 98,
+      "end_line": 242,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Retriever.retrieve.query_vector",
+      "line": 128,
+      "end_line": 137,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Retriever.retrieve.search",
+      "line": 139,
+      "end_line": 159,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Retriever.retrieve.rerank",
+      "line": 166,
+      "end_line": 188,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/retrieval.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    }
+  ],
+  "evidence.py": [
+    {
+      "function": "keywords",
+      "line": 27,
+      "end_line": 28,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "extract_options",
+      "line": 31,
+      "end_line": 81,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "select_options",
+      "line": 84,
+      "end_line": 127,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "select_options.redundant",
+      "line": 88,
+      "end_line": 95,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "select_options.render",
+      "line": 97,
+      "end_line": 104,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "select_options.utility",
+      "line": 110,
+      "end_line": 113,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "expansion_reason",
+      "line": 130,
+      "end_line": 149,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/evidence.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    }
+  ],
+  "investigations.py": [
+    {
+      "function": "investigation_id",
+      "line": 29,
+      "end_line": 33,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "revision_report",
+      "line": 36,
+      "end_line": 47,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "previous_analysis",
+      "line": 50,
+      "end_line": 75,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "previous_analysis.excerpt",
+      "line": 63,
+      "end_line": 65,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations.__init__",
+      "line": 79,
+      "end_line": 83,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations._path",
+      "line": 85,
+      "end_line": 86,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations._lock",
+      "line": 89,
+      "end_line": 102,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations._read",
+      "line": 104,
+      "end_line": 131,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations.document",
+      "line": 133,
+      "end_line": 136,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations.revise",
+      "line": 138,
+      "end_line": 187,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations._revise",
+      "line": 189,
+      "end_line": 383,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations._revise.size",
+      "line": 231,
+      "end_line": 232,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations._revise.transmit",
+      "line": 303,
+      "end_line": 337,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "Investigations._revise.answer",
+      "line": 363,
+      "end_line": 364,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/investigations.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    }
+  ],
+  "decision.py": [
+    {
+      "function": "decision_prompt",
+      "line": 13,
+      "end_line": 33,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    },
+    {
+      "function": "validate_decision",
+      "line": 36,
+      "end_line": 69,
+      "source_path": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/decision.py",
+      "reviewed": true,
+      "coverage_evidence": "report.md coverage table; probe-results.json; 55 passing active targeted tests"
+    }
+  ]
+}

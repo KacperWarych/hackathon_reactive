@@ -1,0 +1,23 @@
+{
+  "finding": "RET-01",
+  "disposition": "retain_existing_finding_no_register_change",
+  "notify_user": false,
+  "reason": "No new actionable regression; zero selected-unit clipping observed in one public-only candidate-opportunity enumeration.",
+  "evidence_grade": 4,
+  "fit_grade": 5,
+  "benefit_grade": 3,
+  "feasibility_grade": 5,
+  "independently_rerun": true,
+  "critique_accepted": true,
+  "sessions": 176,
+  "turns": 2694,
+  "memory_units": 2701,
+  "default_chunks": 403,
+  "questions": 59,
+  "eligible_question_chunk_opportunities": 23777,
+  "proposed_unit_options": 47554,
+  "selected_late_unit_clipping_observed": 0,
+  "actual_retrieval_or_answer_error_rate_measured": false,
+  "remedy_gain_measured": false,
+  "existing_distinct_audit_items": 49
+}

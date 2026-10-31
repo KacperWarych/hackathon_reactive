@@ -1,0 +1,100 @@
+{
+  "tokenizer_revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+  "cases": {
+    "period_space": {
+      "tokens": 427,
+      "sentence_boundary_offsets": [
+        561,
+        1122,
+        1683,
+        2244,
+        2805,
+        3366
+      ],
+      "token_matched_boundaries": [
+        3366
+      ],
+      "punctuation_end_matched_boundaries": [
+        560,
+        1121,
+        1682,
+        2243,
+        2804,
+        3365
+      ],
+      "units": [
+        {
+          "start": 0,
+          "end": 1585,
+          "tokens": 200,
+          "ends_at_recorded_boundary": false,
+          "tail": "ather weather weather weather weather weather"
+        },
+        {
+          "start": 1585,
+          "end": 3164,
+          "tokens": 200,
+          "ends_at_recorded_boundary": false,
+          "tail": "ather weather weather weather weather weather"
+        },
+        {
+          "start": 3164,
+          "end": 3366,
+          "tokens": 27,
+          "ends_at_recorded_boundary": true,
+          "tail": "her weather weather weather weather weather. "
+        }
+      ]
+    },
+    "newline": {
+      "tokens": 426,
+      "sentence_boundary_offsets": [
+        560,
+        1120,
+        1680,
+        2240,
+        2800,
+        3360
+      ],
+      "token_matched_boundaries": [
+        560,
+        1120,
+        1680,
+        2240,
+        2800,
+        3360
+      ],
+      "punctuation_end_matched_boundaries": [
+        560,
+        1120,
+        1680,
+        2240,
+        2800,
+        3360
+      ],
+      "units": [
+        {
+          "start": 0,
+          "end": 1120,
+          "tokens": 142,
+          "ends_at_recorded_boundary": true,
+          "tail": "ther weather weather weather weather weather\n"
+        },
+        {
+          "start": 1120,
+          "end": 2240,
+          "tokens": 142,
+          "ends_at_recorded_boundary": true,
+          "tail": "ther weather weather weather weather weather\n"
+        },
+        {
+          "start": 2240,
+          "end": 3360,
+          "tokens": 142,
+          "ends_at_recorded_boundary": true,
+          "tail": "ther weather weather weather weather weather\n"
+        }
+      ]
+    }
+  }
+}

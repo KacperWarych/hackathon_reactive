@@ -1,0 +1,249 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning": "high",
+  "function_count": 38,
+  "functions": [
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "iso_date",
+      "line": 12,
+      "end_line": 18
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "dataset_files",
+      "line": 21,
+      "end_line": 41
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "Store.__init__",
+      "line": 45,
+      "end_line": 71
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "Store.close",
+      "line": 73,
+      "end_line": 74
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "Store.questions",
+      "line": 76,
+      "end_line": 84
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "Store.sessions",
+      "line": 86,
+      "end_line": 89
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "Store.stats",
+      "line": 91,
+      "end_line": 93
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "Store.valid_sessions",
+      "line": 95,
+      "end_line": 97
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py",
+      "function": "Store.ingest",
+      "line": 99,
+      "end_line": 157
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entries.py",
+      "function": "parse_transcript",
+      "line": 12,
+      "end_line": 30
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entries.py",
+      "function": "add_entry",
+      "line": 33,
+      "end_line": 45
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entries.py",
+      "function": "export_entries",
+      "line": 48,
+      "end_line": 53
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/chunks.py",
+      "function": "chunk_turns",
+      "line": 6,
+      "end_line": 36
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/chunks.py",
+      "function": "chunk_scheme",
+      "line": 39,
+      "end_line": 41
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+      "function": "cues",
+      "line": 20,
+      "end_line": 21
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+      "function": "Memory.__init__",
+      "line": 25,
+      "end_line": 37
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+      "function": "Memory.records",
+      "line": 39,
+      "end_line": 71
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+      "function": "Memory.prepare",
+      "line": 73,
+      "end_line": 75
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+      "function": "Memory.inference_get",
+      "line": 77,
+      "end_line": 84
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py",
+      "function": "Memory.inference_put",
+      "line": 86,
+      "end_line": 91
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/index.py",
+      "function": "Index.__init__",
+      "line": 15,
+      "end_line": 17
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/index.py",
+      "function": "Index.build",
+      "line": 19,
+      "end_line": 88
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/index.py",
+      "function": "Index.candidates",
+      "line": 90,
+      "end_line": 114
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "setup_models",
+      "line": 13,
+      "end_line": 23
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "Models.__init__",
+      "line": 27,
+      "end_line": 33
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "Models.key",
+      "line": 36,
+      "end_line": 38
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "Models.tokenizer",
+      "line": 41,
+      "end_line": 46
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "Models._load",
+      "line": 48,
+      "end_line": 59
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "Models._forward",
+      "line": 61,
+      "end_line": 76
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "Models.embed",
+      "line": 78,
+      "end_line": 98
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py",
+      "function": "Models.rerank",
+      "line": 100,
+      "end_line": 123
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "function": "digest",
+      "line": 14,
+      "end_line": 15
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "function": "atomic_json",
+      "line": 18,
+      "end_line": 25
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "function": "Config.fingerprint",
+      "line": 50,
+      "end_line": 51
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "function": "revisions",
+      "line": 54,
+      "end_line": 58
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "function": "data_root",
+      "line": 61,
+      "end_line": 66
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "function": "load_env",
+      "line": 69,
+      "end_line": 71
+    },
+    {
+      "file": "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py",
+      "function": "device",
+      "line": 74,
+      "end_line": 79
+    }
+  ],
+  "sha256": {
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/store.py": "1757d31fd448625adc08c6a684f2e785d54875d0470c3a89f6590a2c726cd4f4",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/entries.py": "e14c1291c407911b1717b57162b423ccfc46273bdf9f8f036af408bc0c083111",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/chunks.py": "68fbb491cfcc06e81a9325b8a187a15ed99ca6ff2303f99254998015c3a8defd",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/memory.py": "39c8f59def8f1a9ed34291955d14e6e1be05398e245944ee67909b39a3719ee9",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/index.py": "9a3528f29e34f256298b31bdda16f717e8c025b857f86d26160af17b29e52c10",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/models.py": "a4f441c57854712af81045ba743bd55158835431a43d4fe5bb524a2fe3536d01",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/src/decision_memory/config.py": "24c9bcd494733daa4e7495f5218005f25958d56c0ad0f80c5cdd4ee31bdb3ec4",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/setup.sh": "877a49192c00103a9f7bd69d191a8a1ad362306eaf2a60b091d99eff14e135b9",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/scripts/prepare.py": "55fae2fad1102e537977bb4a2dcceb6387439bc1fc9e2ffa07c8260942406d4a",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/pyproject.toml": "e50cde2963d3448efaa0bdd7710f8b880eb30199df91583a8d2fd9bcd7ba1df5",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/uv.lock": "35860ff3cae5909364516ab846a2ec31160a2ebb84ec06d49e247d3bd2ec2b9a",
+    "/Users/kacperwarych/Desktop/hackathon reactive ai/models.lock.json": "20a804d935cf50a4a0c6367595d7185758a3fedaccef85673745228d0ad43b60"
+  }
+}

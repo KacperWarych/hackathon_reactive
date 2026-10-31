@@ -1,0 +1,65 @@
+{
+  "model_role": "Inherited GPT-6.1 Sol / high; no separate runtime introspection",
+  "public_only": true,
+  "gold_read": false,
+  "tokenizer_revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+  "default_excerpt_tokens": 320,
+  "default_context_tokens": 80,
+  "questions": 59,
+  "histories": 1,
+  "counts": {
+    "sessions": 176,
+    "turns": 2694,
+    "units": 2701,
+    "chunks": 403,
+    "short_late_units_with_preceding_turn": 2,
+    "eligible_question_chunk_pairs": 23777,
+    "proposed_unit_options_across_question_chunks": 47554,
+    "questions_with_at_least_one_exposed_candidate": 0,
+    "sources_with_question_proposed_exposure": 0,
+    "turns_with_question_proposed_exposure": 0,
+    "late_units_partially_or_fully_clipped": 0,
+    "late_units_entirely_absent": 0,
+    "sessions_with_clipped_late_unit": 0,
+    "question_chunk_pairs_proposing_clipped_late_unit": 0,
+    "proposed_clipped_late_unit_options": 0
+  },
+  "structural_exposure_examples": [],
+  "late_unit_structural_candidates": [
+    {
+      "source": "15b6438ddf5692a3",
+      "turn_index": 20,
+      "selected_unit_tokens": 55,
+      "expanded_tokens_before_cap": 337,
+      "tokens_through_selected_unit_end": 294
+    },
+    {
+      "source": "15b6438ddf5692a3",
+      "turn_index": 28,
+      "selected_unit_tokens": 30,
+      "expanded_tokens_before_cap": 282,
+      "tokens_through_selected_unit_end": 282
+    }
+  ],
+  "real_extract_options_controls": [
+    {
+      "source": "15b6438ddf5692a3",
+      "selected_late_unit_clipped": false,
+      "default_offsets_cover_unit": true,
+      "context0_offsets_cover_unit": true,
+      "original_selected_unit_present_default": true,
+      "original_selected_unit_present_context0": true
+    }
+  ],
+  "runtime_seconds": 1.161,
+  "input_sha256": {
+    "histories.jsonl": "fcd4c06e00819325642ed18019055b43ba5fa19e49b591ca6782be042e294e53",
+    "questions.jsonl": "6abef0779c2c33f0527cdf88d428ad4394cafe6cfebb9b78ad3a6cbc4f69b3ff"
+  },
+  "source_sha256": {
+    "evidence.py": "755f6a7f5d9d18b0b8c1a240c6aedac66f02762489e9589ce51bc97945791b95",
+    "memory.py": "39c8f59def8f1a9ed34291955d14e6e1be05398e245944ee67909b39a3719ee9",
+    "chunks.py": "68fbb491cfcc06e81a9325b8a187a15ed99ca6ff2303f99254998015c3a8defd",
+    "config.py": "24c9bcd494733daa4e7495f5218005f25958d56c0ad0f80c5cdd4ee31bdb3ec4"
+  }
+}

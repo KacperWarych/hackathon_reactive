@@ -1,0 +1,498 @@
+{
+  "summary": {
+    "previous": {
+      "questions": 12,
+      "mean_message_chars": 13388.166666666666,
+      "mean_evidence_tokens": 3928.75,
+      "p50_seconds": 0.009,
+      "p95_seconds": 0.02169999999999998
+    },
+    "budgeted": {
+      "questions": 12,
+      "mean_message_chars": 3742.5833333333335,
+      "mean_evidence_tokens": 797.6666666666666,
+      "p50_seconds": 0.066,
+      "p95_seconds": 0.15589999999999996
+    }
+  },
+  "rows": [
+    {
+      "version": "previous",
+      "question_id": "q_00c8a409c888",
+      "seconds": 0.036,
+      "message_chars": 13503,
+      "sources": 9,
+      "evidence_tokens": 3967,
+      "excerpts": null,
+      "source_ids": [
+        "s_42aac84c5fdd",
+        "s_58a604f36ecd",
+        "s_fc86cb95ebb0",
+        "s_fdcedb4e4138",
+        "s_99af02529969",
+        "s_d0403febf47e",
+        "s_f8b25a472fe5",
+        "s_c09c2bcdebca",
+        "s_734ab5f6d6ba"
+      ],
+      "gold_sessions": 0,
+      "packed_session_recall": null
+    },
+    {
+      "version": "previous",
+      "question_id": "q_07c994207826",
+      "seconds": 0.009,
+      "message_chars": 13447,
+      "sources": 10,
+      "evidence_tokens": 3983,
+      "excerpts": null,
+      "source_ids": [
+        "s_ca2c65d67b22",
+        "s_75ba9769dfbf",
+        "s_0589b17a0bb5",
+        "s_8f523ae1180e",
+        "s_8af1a9de94f3",
+        "s_d9ca68b69895",
+        "s_617b7957f0a2",
+        "s_6ea8bb35eafe",
+        "s_d5931d1a8816",
+        "s_c2e523ae80d6"
+      ],
+      "gold_sessions": 0,
+      "packed_session_recall": null
+    },
+    {
+      "version": "previous",
+      "question_id": "q_09827cdb77d9",
+      "seconds": 0.009,
+      "message_chars": 13427,
+      "sources": 8,
+      "evidence_tokens": 3959,
+      "excerpts": null,
+      "source_ids": [
+        "s_836512fa044d",
+        "s_fdcedb4e4138",
+        "s_377e799aca20",
+        "s_a6c2f9794ad9",
+        "s_99af02529969",
+        "s_815f61663529",
+        "s_f8b25a472fe5",
+        "s_aceb1d5416e3"
+      ],
+      "gold_sessions": 2,
+      "packed_session_recall": 1.0
+    },
+    {
+      "version": "previous",
+      "question_id": "q_0b90a20090a2",
+      "seconds": 0.008,
+      "message_chars": 13622,
+      "sources": 11,
+      "evidence_tokens": 3987,
+      "excerpts": null,
+      "source_ids": [
+        "s_c2e523ae80d6",
+        "s_68bf1a9d477b",
+        "s_feee3f4e043d",
+        "s_41dad95f8414",
+        "s_19ab7f9c7a72",
+        "s_e76de540ffe6",
+        "s_5f1f86c917df",
+        "s_db5772e3b559",
+        "s_70c5ca23c2bc",
+        "s_37cad55f02ee",
+        "s_bbaabd0c26de"
+      ],
+      "gold_sessions": 5,
+      "packed_session_recall": 0.0
+    },
+    {
+      "version": "previous",
+      "question_id": "q_0d04f1762dba",
+      "seconds": 0.008,
+      "message_chars": 13017,
+      "sources": 10,
+      "evidence_tokens": 3776,
+      "excerpts": null,
+      "source_ids": [
+        "s_c2e523ae80d6",
+        "s_75ba9769dfbf",
+        "s_0589b17a0bb5",
+        "s_c35b5c7bb11e",
+        "s_d9ca68b69895",
+        "s_8f523ae1180e",
+        "s_8af1a9de94f3",
+        "s_ca2c65d67b22",
+        "s_19cc6b88f870",
+        "s_483a84c88334"
+      ],
+      "gold_sessions": 4,
+      "packed_session_recall": 0.25
+    },
+    {
+      "version": "previous",
+      "question_id": "q_0fbe0205e0d0",
+      "seconds": 0.008,
+      "message_chars": 13087,
+      "sources": 9,
+      "evidence_tokens": 3856,
+      "excerpts": null,
+      "source_ids": [
+        "s_75ba9769dfbf",
+        "s_0589b17a0bb5",
+        "s_8f523ae1180e",
+        "s_ca2c65d67b22",
+        "s_8af1a9de94f3",
+        "s_d9ca68b69895",
+        "s_6ea8bb35eafe",
+        "s_d5931d1a8816",
+        "s_c2e523ae80d6"
+      ],
+      "gold_sessions": 0,
+      "packed_session_recall": null
+    },
+    {
+      "version": "previous",
+      "question_id": "q_10a4224832e5",
+      "seconds": 0.01,
+      "message_chars": 13470,
+      "sources": 10,
+      "evidence_tokens": 3900,
+      "excerpts": null,
+      "source_ids": [
+        "s_f0838f2d64c6",
+        "s_2bd95ce4720f",
+        "s_377e799aca20",
+        "s_c04dcd1bd2ce",
+        "s_29082c3da3aa",
+        "s_0452c12d162f",
+        "s_c1db2fa1a317",
+        "s_08db7a09ca79",
+        "s_935e1bde59e6",
+        "s_5f1f86c917df"
+      ],
+      "gold_sessions": 15,
+      "packed_session_recall": 0.13333333333333333
+    },
+    {
+      "version": "previous",
+      "question_id": "q_1d984daceee7",
+      "seconds": 0.008,
+      "message_chars": 13312,
+      "sources": 10,
+      "evidence_tokens": 3953,
+      "excerpts": null,
+      "source_ids": [
+        "s_77a29b399aec",
+        "s_d5401af905ee",
+        "s_c2e523ae80d6",
+        "s_37cad55f02ee",
+        "s_41dad95f8414",
+        "s_19ab7f9c7a72",
+        "s_e76de540ffe6",
+        "s_db5772e3b559",
+        "s_70c5ca23c2bc",
+        "s_93567410234f"
+      ],
+      "gold_sessions": 18,
+      "packed_session_recall": 0.16666666666666666
+    },
+    {
+      "version": "previous",
+      "question_id": "q_1f4e652d59ec",
+      "seconds": 0.009,
+      "message_chars": 13562,
+      "sources": 10,
+      "evidence_tokens": 3934,
+      "excerpts": null,
+      "source_ids": [
+        "s_19ab7f9c7a72",
+        "s_c2e523ae80d6",
+        "s_fab536a5beb7",
+        "s_28fe27bc673e",
+        "s_374400e65e6c",
+        "s_42aac84c5fdd",
+        "s_41dad95f8414",
+        "s_af4386f6f771",
+        "s_c94be1bc5abe",
+        "s_f0838f2d64c6"
+      ],
+      "gold_sessions": 27,
+      "packed_session_recall": 0.14814814814814814
+    },
+    {
+      "version": "previous",
+      "question_id": "q_28b3e8346a7c",
+      "seconds": 0.008,
+      "message_chars": 13484,
+      "sources": 9,
+      "evidence_tokens": 3987,
+      "excerpts": null,
+      "source_ids": [
+        "s_3a9946bb55b6",
+        "s_c22cc3c3dd20",
+        "s_e1eddda84e5d",
+        "s_e390a59cd129",
+        "s_19ab7f9c7a72",
+        "s_232ab91840d4",
+        "s_29082c3da3aa",
+        "s_1eb7d72a28a4",
+        "s_c04dcd1bd2ce"
+      ],
+      "gold_sessions": 1,
+      "packed_session_recall": 1.0
+    },
+    {
+      "version": "previous",
+      "question_id": "q_28f55849fbef",
+      "seconds": 0.009,
+      "message_chars": 13329,
+      "sources": 10,
+      "evidence_tokens": 3909,
+      "excerpts": null,
+      "source_ids": [
+        "s_f0838f2d64c6",
+        "s_41c1fa76c372",
+        "s_c2e523ae80d6",
+        "s_f4b2d1f6e405",
+        "s_41dad95f8414",
+        "s_19ab7f9c7a72",
+        "s_4bf907776e51",
+        "s_e76de540ffe6",
+        "s_db5772e3b559",
+        "s_70c5ca23c2bc"
+      ],
+      "gold_sessions": 13,
+      "packed_session_recall": 0.3076923076923077
+    },
+    {
+      "version": "previous",
+      "question_id": "q_33682f8d27ca",
+      "seconds": 0.009,
+      "message_chars": 13398,
+      "sources": 10,
+      "evidence_tokens": 3934,
+      "excerpts": null,
+      "source_ids": [
+        "s_c2e523ae80d6",
+        "s_41dad95f8414",
+        "s_19ab7f9c7a72",
+        "s_e76de540ffe6",
+        "s_db5772e3b559",
+        "s_70c5ca23c2bc",
+        "s_37cad55f02ee",
+        "s_91219c430ac3",
+        "s_42aac84c5fdd",
+        "s_803d71728aba"
+      ],
+      "gold_sessions": 10,
+      "packed_session_recall": 0.0
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_00c8a409c888",
+      "seconds": 0.19,
+      "message_chars": 2727,
+      "sources": 3,
+      "evidence_tokens": 532,
+      "excerpts": 6,
+      "source_ids": [
+        "s_58a604f36ecd",
+        "s_42aac84c5fdd",
+        "s_fc86cb95ebb0"
+      ],
+      "gold_sessions": 0,
+      "packed_session_recall": null
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_07c994207826",
+      "seconds": 0.125,
+      "message_chars": 3272,
+      "sources": 3,
+      "evidence_tokens": 716,
+      "excerpts": 6,
+      "source_ids": [
+        "s_ca2c65d67b22",
+        "s_75ba9769dfbf",
+        "s_0589b17a0bb5"
+      ],
+      "gold_sessions": 0,
+      "packed_session_recall": null
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_09827cdb77d9",
+      "seconds": 0.055,
+      "message_chars": 3686,
+      "sources": 4,
+      "evidence_tokens": 789,
+      "excerpts": 6,
+      "source_ids": [
+        "s_836512fa044d",
+        "s_fc86cb95ebb0",
+        "s_a6c2f9794ad9",
+        "s_fdcedb4e4138"
+      ],
+      "gold_sessions": 2,
+      "packed_session_recall": 1.0
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_0b90a20090a2",
+      "seconds": 0.128,
+      "message_chars": 4182,
+      "sources": 5,
+      "evidence_tokens": 862,
+      "excerpts": 6,
+      "source_ids": [
+        "s_68bf1a9d477b",
+        "s_c2e523ae80d6",
+        "s_feee3f4e043d",
+        "s_e76de540ffe6",
+        "s_41dad95f8414"
+      ],
+      "gold_sessions": 5,
+      "packed_session_recall": 0.0
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_0d04f1762dba",
+      "seconds": 0.06,
+      "message_chars": 3791,
+      "sources": 4,
+      "evidence_tokens": 839,
+      "excerpts": 6,
+      "source_ids": [
+        "s_d9ca68b69895",
+        "s_c2e523ae80d6",
+        "s_75ba9769dfbf",
+        "s_0589b17a0bb5"
+      ],
+      "gold_sessions": 4,
+      "packed_session_recall": 0.0
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_0fbe0205e0d0",
+      "seconds": 0.046,
+      "message_chars": 3696,
+      "sources": 3,
+      "evidence_tokens": 842,
+      "excerpts": 6,
+      "source_ids": [
+        "s_75ba9769dfbf",
+        "s_0589b17a0bb5",
+        "s_8f523ae1180e"
+      ],
+      "gold_sessions": 0,
+      "packed_session_recall": null
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_10a4224832e5",
+      "seconds": 0.085,
+      "message_chars": 3847,
+      "sources": 5,
+      "evidence_tokens": 837,
+      "excerpts": 6,
+      "source_ids": [
+        "s_f0838f2d64c6",
+        "s_2bd95ce4720f",
+        "s_c04dcd1bd2ce",
+        "s_377e799aca20",
+        "s_29082c3da3aa"
+      ],
+      "gold_sessions": 15,
+      "packed_session_recall": 0.0
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_1d984daceee7",
+      "seconds": 0.072,
+      "message_chars": 4606,
+      "sources": 6,
+      "evidence_tokens": 1005,
+      "excerpts": 6,
+      "source_ids": [
+        "s_77a29b399aec",
+        "s_19ab7f9c7a72",
+        "s_d5401af905ee",
+        "s_e76de540ffe6",
+        "s_c2e523ae80d6",
+        "s_37cad55f02ee"
+      ],
+      "gold_sessions": 18,
+      "packed_session_recall": 0.1111111111111111
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_1f4e652d59ec",
+      "seconds": 0.06,
+      "message_chars": 4086,
+      "sources": 4,
+      "evidence_tokens": 860,
+      "excerpts": 6,
+      "source_ids": [
+        "s_19ab7f9c7a72",
+        "s_fab536a5beb7",
+        "s_c2e523ae80d6",
+        "s_28fe27bc673e"
+      ],
+      "gold_sessions": 27,
+      "packed_session_recall": 0.07407407407407407
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_28b3e8346a7c",
+      "seconds": 0.075,
+      "message_chars": 2904,
+      "sources": 3,
+      "evidence_tokens": 585,
+      "excerpts": 6,
+      "source_ids": [
+        "s_3a9946bb55b6",
+        "s_c22cc3c3dd20",
+        "s_e1eddda84e5d"
+      ],
+      "gold_sessions": 1,
+      "packed_session_recall": 1.0
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_28f55849fbef",
+      "seconds": 0.053,
+      "message_chars": 4283,
+      "sources": 5,
+      "evidence_tokens": 914,
+      "excerpts": 6,
+      "source_ids": [
+        "s_f0838f2d64c6",
+        "s_41c1fa76c372",
+        "s_41dad95f8414",
+        "s_c2e523ae80d6",
+        "s_e76de540ffe6"
+      ],
+      "gold_sessions": 13,
+      "packed_session_recall": 0.15384615384615385
+    },
+    {
+      "version": "budgeted",
+      "question_id": "q_33682f8d27ca",
+      "seconds": 0.047,
+      "message_chars": 3831,
+      "sources": 4,
+      "evidence_tokens": 791,
+      "excerpts": 6,
+      "source_ids": [
+        "s_19ab7f9c7a72",
+        "s_c2e523ae80d6",
+        "s_e76de540ffe6",
+        "s_41dad95f8414"
+      ],
+      "gold_sessions": 10,
+      "packed_session_recall": 0.0
+    }
+  ],
+  "note": "12 real salesgen questions, BM25 and offline Qwen tokenizer; source/chunk snapshot in /tmp. Retrieval latency only, no Reactor calls or answer accuracy evaluation. Gold-session coverage is diagnostic: broad count questions exceed the compact evidence budget, and even the previous pipeline did not recover all required sessions. Two sampled questions requiring 1–2 sessions retained complete session coverage in both versions. Source-session coverage does not prove excerpt or answer completeness."
+}

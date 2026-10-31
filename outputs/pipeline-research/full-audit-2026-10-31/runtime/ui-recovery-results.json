@@ -1,0 +1,5 @@
+{
+  "pending_entry_survives_in_db": true,
+  "retry_visible_in_original_session": true,
+  "retry_visible_in_fresh_session": false
+}

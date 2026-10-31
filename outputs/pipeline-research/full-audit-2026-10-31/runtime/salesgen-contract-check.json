@@ -1,0 +1,30 @@
+{
+  "histories": 1,
+  "sessions": 176,
+  "questions": 59,
+  "metadata_field_coverage": {
+    "call_id": 176,
+    "customer_id": 176,
+    "customer_name": 176,
+    "product_id": 176
+  },
+  "distinct_customer_ids": 147,
+  "gold_questions_with_future_evidence": [],
+  "call_gold_rows": 176,
+  "call_gold_keys": [
+    "session_id",
+    "call_id",
+    "customer_id",
+    "customer_name",
+    "product_id",
+    "pattern",
+    "outcome",
+    "fault",
+    "primary_reason",
+    "secondary_reason",
+    "primary_detail",
+    "secondary_detail",
+    "prior_call",
+    "simulation_status"
+  ]
+}

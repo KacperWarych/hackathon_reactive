@@ -1,0 +1,26 @@
+{
+  "default_import_root": "/Users/kacperwarych/Desktop/hackathon reactive ai/.venv/lib/python3.12/site-packages/decision_memory",
+  "differences": [
+    {
+      "file": "decision.py",
+      "source_sha256": "c868c25106f3cfacfe4f79924ab7d50a9c64bc705a2bcdf2522000db3df58413",
+      "installed_sha256": "1e12e850cf14887b1bc1d15bcfb5603c62fe89c7a5b821bc02683e9f5515ef81"
+    },
+    {
+      "file": "investigation_ui.py",
+      "source_sha256": "8d2a6858f8c8c64c9df096e3822d6d609ee7585d539dd67d9c34716f4ca98f7e",
+      "installed_sha256": "de5242f8d24acd3992e6af9d6c2ff9f329dbf3b644c932bd08fa5aa58a540c61"
+    },
+    {
+      "file": "investigations.py",
+      "source_sha256": "6eb23938e825bd132c91e75b4e4ad85d7655161da575238af7ed3932b6aacb77",
+      "installed_sha256": "0d4df91eb3a23cdb3fb8d79b73a990b5f3fd687a8c712ca04c91dbac7f5fa3e5"
+    },
+    {
+      "file": "report_entry_ui.py",
+      "source_sha256": "d1d05c725b1d3c350de2e18a2f4f60c8688591b1cb921da03d89146a862e7813",
+      "installed_sha256": null
+    }
+  ],
+  "installed_generate_report_accepts_decision_only": false
+}

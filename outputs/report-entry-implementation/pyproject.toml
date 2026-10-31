@@ -1,0 +1,30 @@
+[project]
+name = "decision-memory"
+version = "0.1.0"
+description = "Evidence-grounded hybrid retrieval for conversation memory"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "numpy>=2.0,<3", "rank-bm25>=0.2.2,<0.3", "torch>=2.6,<3",
+  "transformers>=4.51,<5", "sentence-transformers>=5,<6",
+  "streamlit>=1.45,<2", "websockets>=14,<16", "python-dotenv>=1,<2",
+]
+
+[project.scripts]
+memory = "decision_memory.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<9", "ruff>=0.11,<1"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/decision_memory"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"

@@ -1,0 +1,52 @@
+{
+  "source": "/Users/kacperwarych/Desktop/hackathon reactive ai/salesgen_dataset_fail/public",
+  "contract": [
+    {
+      "line": 23,
+      "text": "- Każda sesja ma pole `meta` z `call_id`, `customer_id`, `customer_name` i `product_id`. **Wyniku rozmowy ani"
+    },
+    {
+      "line": 24,
+      "text": "  powodu w historii nie ma**, bo to pipeline ma je wyłapać."
+    },
+    {
+      "line": 68,
+      "text": "Jak liczone są pytania agregujące:"
+    },
+    {
+      "line": 69,
+      "text": "- **Liczą klientów, nie rozmowy.** Klient z dwiema rozmowami liczy się raz, z powodem z ostatniej rozmowy."
+    },
+    {
+      "line": 70,
+      "text": "  Dlatego bazą jest 119 klientów, którzy ostatecznie nie kupili, a nie 147 nieudanych rozmów."
+    }
+  ],
+  "sessions": 176,
+  "distinct_customer_ids": 147,
+  "customers_with_multiple_calls": 29,
+  "metadata_coverage": {
+    "call_id": 176,
+    "customer_id": 176,
+    "customer_name": 176,
+    "product_id": 176
+  },
+  "ingested": {
+    "histories": 1,
+    "sessions": 176,
+    "questions": 59
+  },
+  "stored_session_columns": [
+    "split",
+    "history_id",
+    "session_id",
+    "date",
+    "iso",
+    "position",
+    "content_hash"
+  ],
+  "returned_session_count": 176,
+  "returned_sessions_with_meta": 0,
+  "stored_content_payload_is_turns_only": true,
+  "evaluation_files_read": false
+}

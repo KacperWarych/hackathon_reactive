@@ -1,0 +1,25 @@
+.venv/
+.tools/
+.data/
+.cache/
+.python/
+.env
+.env.*
+!.env.example
+datasets/
+model-cache/
+runs/
+*.tar.gz
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.DS_Store
+.setup-write-check
+
+# Local credentials and generated files
+renv
+.renv
+*.py[cod]
+.streamlit/secrets.toml
+salesgen_dataset_fail/

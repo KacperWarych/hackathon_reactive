@@ -1,0 +1,61 @@
+{
+  "scope": "Read-only historical saved runs against current gold; not a fresh end-to-end evaluation. Synthetic defect remains valid even if no historical occurrence.",
+  "runs": [
+    {
+      "run_id": "demo-decision",
+      "answered": 1,
+      "answerable_scored": 0,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    },
+    {
+      "run_id": "demo-decision-v2",
+      "answered": 1,
+      "answerable_scored": 0,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    },
+    {
+      "run_id": "demo-live",
+      "answered": 3,
+      "answerable_scored": 2,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    },
+    {
+      "run_id": "demo_1793412306_c32c0eb3",
+      "answered": 1,
+      "answerable_scored": 1,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    },
+    {
+      "run_id": "demo_1793416067_c6ce1acc",
+      "answered": 1,
+      "answerable_scored": 0,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    },
+    {
+      "run_id": "demo_1793416384_3ac47686",
+      "answered": 1,
+      "answerable_scored": 0,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    },
+    {
+      "run_id": "demo_1793416480_6ddecd25",
+      "answered": 0,
+      "answerable_scored": 0,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    },
+    {
+      "run_id": "validation-live",
+      "answered": 13,
+      "answerable_scored": 11,
+      "citation_only_matches": 0,
+      "empty_after_stripping": 0
+    }
+  ]
+}
