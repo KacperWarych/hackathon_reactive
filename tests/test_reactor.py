@@ -88,6 +88,21 @@ def test_abstention_is_a_completed_model_outcome(indexed, store):
     assert checked_result(response, q, [], store)["status"] == "answered"
 
 
+@pytest.mark.parametrize("change", [{"abstained": "false"}, {"answer": None},
+                                   {"citations": ["s1"]}, {"citations": None}])
+def test_malformed_submission_fields_are_rejected(indexed, store, change):
+    q, _ = indexed
+    response = {"status": "answered", "answer": "Approved", "abstained": False,
+                "citations": [{"id": "s1"}], **change}
+    assert checked_result(response, q, [{"id": "s1"}], store)["status"] == "invalid"
+
+
+def test_empty_abstention_answer_is_valid(indexed, store):
+    q, _ = indexed
+    response = {"status": "answered", "answer": "", "abstained": True, "citations": []}
+    assert checked_result(response, q, [], store)["status"] == "answered"
+
+
 def test_test_export_requires_entire_official_set(indexed, store, env):
     q, _ = indexed
     put_question(store, qid="test-q", split="test")
@@ -151,6 +166,24 @@ def test_all_official_questions_required_for_submission_ready(store, env):
             "status": "answered", "abstained": True, "answer": "INSUFFICIENT_EVIDENCE", "citations": []}})
     report = export_predictions(store, "complete-test", env/"test.jsonl")
     assert report["written"] == 146 and report["submission_ready"]
+    rows = [json.loads(line) for line in (env / "test.jsonl").read_text().splitlines()]
+    assert all(set(row) == {"question_id", "abstain", "answer", "citations"} for row in rows)
+    assert all(row["abstain"] is True and row["answer"] == "" and row["citations"] == [] for row in rows)
+    # Exercise the actual packaging entry point without a live Reactor call.
+    import runpy
+    import tarfile
+    from pathlib import Path
+    script = Path(__file__).resolve().parents[1] / "scripts/package_submission.py"
+    package = runpy.run_path(str(script))["package"]
+    output = env / "submission"
+    assert package("complete-test", output)["submission_ready"]
+    with tarfile.open(output / "code.tar.gz") as archive:
+        names = set(archive.getnames())
+    assert "decision-memory/README.md" in names
+    assert "decision-memory/src/decision_memory/reactor.py" in names
+    assert "decision-memory/scripts/setup.sh" in names
+    assert not any("/.data/" in name or name.endswith("/.env") for name in names)
+    assert (output / "PRESENTATION.md").exists()
 
 
 def test_uncited_answer_gets_one_audited_corrective_followup(indexed, store, env):

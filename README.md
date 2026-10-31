@@ -7,7 +7,7 @@ Local hybrid retrieval over the Reactive AI conversation dataset, with a source-
 ## Start
 
 ```sh
-cd '/Users/kacperwarych/Documents/ChatGPT/hackathon reactive ai'
+# From the extracted source archive or cloned repository:
 sh scripts/setup.sh
 .venv/bin/memory ingest --split dev
 .venv/bin/memory ingest --split test
@@ -84,6 +84,43 @@ Every outgoing request is checkpointed before transmission. Completed answers ar
 For a known completed answer that omits all citations, the runner asks Reactor once for a corrected final answer with source labels. Both requests and responses are retained. If that correction is still uncited or encounters a transport failure, the run stops for review. It never adds citations to model output itself.
 
 Submission export validates all 146 test questions and checks citations against each question's own history. Missing or failed answers block a full export. `--allow-partial` is for diagnostics and does not make an incomplete result submission-ready. Final answers are never manually edited.
+
+### Final submission: three parts
+
+After the live test run completes, package it from the project root:
+
+```sh
+PYTHONPATH=src .venv/bin/python scripts/package_submission.py --run-id test-final
+```
+
+This writes `.data/submission/predictions.jsonl`, `code.tar.gz` (runnable source,
+locked dependencies, tests, and this README), and `PRESENTATION.md` (short speaking
+outline). The package command blocks incomplete predictions and excludes local
+credentials, datasets, caches, and private run logs from the source archive.
+Submit the predictions and code archive, then present the solution at the final
+session. Confirm the deadline, submission channel, and presentation format from
+the kickoff announcement; they are not specified here.
+
+Every UTF-8 JSONL line has exactly this schema (illustrative values):
+
+```json
+{"question_id": "q_example", "abstain": false, "answer": "Answer produced by Reactor", "citations": ["s_example"]}
+```
+
+`answer` is always a string, including `""` on abstention. `abstain` is a boolean
+chosen by the system when evidence is insufficient. `citations` contains original
+session IDs supporting the answer. Errors do not count as abstentions. The
+asterisks and HTML entity in the supplied formatted example are not JSON field
+names or ID transformations: preserve dataset IDs exactly.
+
+To reproduce on another machine, extract `code.tar.gz`, enter `decision-memory`,
+run `sh scripts/setup.sh`, configure `.env`, and provide the official archives.
+Use the offline preparation and live run commands above. For an inexpensive
+spot check, use `memory run --split test --limit 3 --run-id spot-check --mode full`
+after indexing, then `memory export --run-id spot-check --allow-partial --out spot-check.jsonl`.
+Keep model locks, dataset inputs, retrieval mode and configuration fixed for
+comparisons. Reactor answers may vary between reruns. Saved local run records
+retain requests, responses, and evidence for provenance; do not hand-edit answers.
 
 ## Evidence and interpretation
 

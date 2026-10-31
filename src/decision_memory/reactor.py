@@ -77,9 +77,14 @@ def checked_result(result, question, evidence, store):
     valid = store.valid_sessions(question["split"], question["history_id"])
     supplied = {e["id"] for e in evidence}
     cites = result.get("citations", [])
+    if (not isinstance(result.get("abstained", False), bool)
+            or not isinstance(result.get("answer"), str)
+            or not isinstance(cites, list)
+            or any(not isinstance(c, dict) or not isinstance(c.get("id"), str) for c in cites)):
+        return {**result, "status": "invalid", "error": "Malformed answer, abstention, or citation fields."}
     if result.get("unknown_citations") or any(c.get("id") not in valid & supplied for c in cites):
         return {**result, "status": "invalid", "error": "Answer includes citations outside the supplied history/evidence."}
-    if not has_answer_content(result.get("answer")):
+    if not result.get("abstained") and not has_answer_content(result.get("answer")):
         return {**result, "status": "invalid", "error": "Empty or citation-only answer."}
     if not result.get("abstained") and not cites:
         return {**result, "status": "invalid", "error": "Factual answer has no source citations."}
